@@ -1,15 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
-import Keyboard from './components/Keyboard.jsx'
-import 'bootstrap/dist/css/bootstrap.min.css'
+import logo from "./logo.svg"
+import "./App.css"
+import Grid from "./components/Grid.jsx"
+import Keyboard from "./components/Keyboard.jsx"
+import { Container, Row, Col } from "react-bootstrap"
+import "bootstrap/dist/css/bootstrap.min.css"
 
 function App() {
   return (
     <div>
-   <p>test</p>
-   <Keyboard />
-   </div>
-  );
+      <h1>Wordle</h1>
+      <Container fluid="sm">
+        <Col>
+          <Grid />
+        </Col>
+      </Container>
+      <Keyboard />
+    </div>
+  )
 }
 
-export default App;
+export default App
