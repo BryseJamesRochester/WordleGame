@@ -1,20 +1,31 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Button from 'react-bootstrap/Button'
 import { Container, Row, Col } from 'react-bootstrap'
 
+
+var row = 0;
+var col = 0;
+var cell = [
+    ['A','__','__','__','__'],
+    ['__','__','__','__','__'],
+    ['__','__','__','__','__'],
+    ['__','__','__','__','__'],
+    ['__','__','__','__','__']
+]
+;
+
+document.addEventListener('keydown', (event) =>
+{
+    var character = event.key.toUpperCase();
+    cell[0][0] = character;
+    col+=1;
+})
 
 
 
 
 function Grid(){
-    var cell = [
-        ['','','','',''],
-        ['_','_','_','_','_'],
-        ['_','_','_','_','_'],
-        ['_','_','_','_','_'],
-        ['_','_','_','_','_']
-    ]
-    ;
+   
 
     const resetGrid = () =>
     {
@@ -31,11 +42,11 @@ function Grid(){
             <Row className="justify-content-md-center">
             <Col lg="auto">
                     <div class='btn-group'>
-                        <Button variant="outline-dark" disabled>{cell[0,0]}</Button>{' '}
-                        <Button variant="outline-dark" disabled>{cell[0,1]}</Button>{' '}
-                        <Button variant="outline-dark" disabled>{cell[0,2]}</Button>{' '}
-                        <Button variant="outline-dark" disabled>{cell[0,3]}</Button>{' '}
-                        <Button variant="outline-dark" disabled>{cell[0,4]}</Button>{' '}
+                        <Button variant="outline-dark" disabled>{cell[0][0]}</Button>{' '}
+                        <Button variant="outline-dark" disabled>{cell[0][1]}</Button>{' '}
+                        <Button variant="outline-dark" disabled>{cell[0][2]}</Button>{' '}
+                        <Button variant="outline-dark" disabled>{cell[0][3]}</Button>{' '}
+                        <Button variant="outline-dark" disabled>{cell[0][4]}</Button>{' '}
                     </div>
                 </Col>
             </Row>
@@ -43,11 +54,11 @@ function Grid(){
             <Row className="justify-content-md-center">
                 <Col lg="auto">
                     <div class='btn-group'>
-                        <Button variant="outline-dark" disabled>{cell[5]}</Button>{' '}
-                        <Button variant="outline-dark" disabled>{cell[6]}</Button>{' '}
-                        <Button variant="outline-dark" disabled>{cell[7]}</Button>{' '}
-                        <Button variant="outline-dark" disabled>{cell[8]}</Button>{' '}
-                        <Button variant="outline-dark" disabled>{cell[9]}</Button>{' '}
+                        <Button variant="outline-dark" disabled>{cell[1][0]}</Button>{' '}
+                        <Button variant="outline-dark" disabled>{cell[1][1]}</Button>{' '}
+                        <Button variant="outline-dark" disabled>{cell[1][2]}</Button>{' '}
+                        <Button variant="outline-dark" disabled>{cell[1][3]}</Button>{' '}
+                        <Button variant="outline-dark" disabled>{cell[1][4]}</Button>{' '}
                     </div>
                 </Col>
             </Row>
@@ -55,11 +66,11 @@ function Grid(){
             <Row className="justify-content-md-center">
             <Col lg="auto">
                     <div class='btn-group'>
-                        <Button variant="outline-dark" disabled>{cell[10]}</Button>{' '}
-                        <Button variant="outline-dark" disabled>{cell[11]}</Button>{' '}
-                        <Button variant="outline-dark" disabled>{cell[12]}</Button>{' '}
-                        <Button variant="outline-dark" disabled>{cell[13]}</Button>{' '}
-                        <Button variant="outline-dark" disabled>{cell[14]}</Button>{' '}
+                        <Button variant="outline-dark" disabled>{cell[2][0]}</Button>{' '}
+                        <Button variant="outline-dark" disabled>{cell[2][1]}</Button>{' '}
+                        <Button variant="outline-dark" disabled>{cell[2][2]}</Button>{' '}
+                        <Button variant="outline-dark" disabled>{cell[2][3]}</Button>{' '}
+                        <Button variant="outline-dark" disabled>{cell[2][4]}</Button>{' '}
                     </div>
                 </Col>
             </Row>
@@ -67,11 +78,11 @@ function Grid(){
             <Row className="justify-content-md-center">
                 <Col lg="auto">
                     <div class='btn-group'>
-                        <Button variant="outline-dark" disabled>{cell[15]}</Button>{' '}
-                        <Button variant="outline-dark" disabled>{cell[16]}</Button>{' '}
-                        <Button variant="outline-dark" disabled>{cell[17]}</Button>{' '}
-                        <Button variant="outline-dark" disabled>{cell[18]}</Button>{' '}
-                        <Button variant="outline-dark" disabled>{cell[19]}</Button>{' '}
+                        <Button variant="outline-dark" disabled>{cell[3][0]}</Button>{' '}
+                        <Button variant="outline-dark" disabled>{cell[3][1]}</Button>{' '}
+                        <Button variant="outline-dark" disabled>{cell[3][2]}</Button>{' '}
+                        <Button variant="outline-dark" disabled>{cell[3][3]}</Button>{' '}
+                        <Button variant="outline-dark" disabled>{cell[3][4]}</Button>{' '}
                     </div>
                 </Col>
             </Row>
@@ -79,11 +90,11 @@ function Grid(){
             <Row className="justify-content-md-center">
                 <Col lg="auto">
                     <div class='btn-group'>
-                        <Button variant="outline-dark" disabled>{cell[20]}</Button>{' '}
-                        <Button variant="outline-dark" disabled>{cell[21]}</Button>{' '}
-                        <Button variant="outline-dark" disabled>{cell[22]}</Button>{' '}
-                        <Button variant="outline-dark" disabled>{cell[23]}</Button>{' '}
-                        <Button variant="outline-dark" disabled>{cell[24]}</Button>{' '}
+                        <Button variant="outline-dark" disabled>{cell[4][0]}</Button>{' '}
+                        <Button variant="outline-dark" disabled>{cell[4][1]}</Button>{' '}
+                        <Button variant="outline-dark" disabled>{cell[4][2]}</Button>{' '}
+                        <Button variant="outline-dark" disabled>{cell[4][3]}</Button>{' '}
+                        <Button variant="outline-dark" disabled>{cell[4][4]}</Button>{' '}
                     </div>
                 </Col>
             </Row>
