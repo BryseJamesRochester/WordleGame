@@ -1,12 +1,18 @@
 import React from 'react'
 import Button from 'react-bootstrap/Button'
 import { Container, Row, Col } from 'react-bootstrap'
-import $ from 'jquery'
+
 
 
 document.addEventListener('keyup', (event) => {
   const key_id = "key_"+event.key
-  console.log(document.getElementById(key_id).className);
+  if(document.getElementById(key_id) != null){
+    document.getElementById(key_id).className = "btn btn-outline-dark";
+  }
+})
+
+document.removeEventListener('keyup', (event) => {
+  const key_id = "key_"+event.key
   if(document.getElementById(key_id) != null){
     document.getElementById(key_id).className = "btn btn-outline-dark";
   }
@@ -14,11 +20,18 @@ document.addEventListener('keyup', (event) => {
 
 document.addEventListener('keydown', (event) => {
   const key_id = "key_"+event.key
-  console.log(key_id + " pressed");
   if(document.getElementById(key_id) != null){
     document.getElementById(key_id).className += " active";
   }
 })
+
+document.removeEventListener('keydown', (event) => {
+  const key_id = "key_"+event.key
+  if(document.getElementById(key_id) != null){
+    document.getElementById(key_id).className += " active";
+  }
+})
+
 
 function Keyboard() {
   return (
@@ -27,7 +40,7 @@ function Keyboard() {
       <Row className="justify-content-md-center">
           <Col md="auto">
           <div class='btn-group'>
-            <Button id="key_q" variant="outline-dark">Q</Button>{' '}
+            <Button id="key_q" variant="outline-dark" >Q</Button>{' '}
             <Button id="key_w" variant="outline-dark">W</Button>{' '}
             <Button id="key_e" variant="outline-dark">E</Button>{' '}
             <Button id="key_r" variant="outline-dark">R</Button>{' '}
