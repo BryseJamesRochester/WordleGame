@@ -21,7 +21,9 @@ connection.once('open', () => {
 });
 
 const usersRouter = require('./routes/users');
+const wordleWordRouter = require('./routes/worldeWord');
 
+app.use('/words', wordleWordRouter);
 app.use('/users', usersRouter);
 
 app.listen(port, () => {
