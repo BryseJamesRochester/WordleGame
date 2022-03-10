@@ -19,9 +19,11 @@ function App() {
         </Container>
       </Navbar>
       <Container className="mw-50">
+        <Col md={{ span: 6, offset: 3 }}>
         <Grid />
+        <Keyboard />
+        </Col>
       </Container>
-      <Keyboard />
     </div>
   )
 }

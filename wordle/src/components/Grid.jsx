@@ -8,7 +8,7 @@ function Grid() {
     <div>
       <Container>
         <Row>
-          <Col className="gridBox d-flex justify-content-center m-1">
+          <Col className="gridBox d-flex justify-content-center m-1 h-100">
             <Square letter="A" />
           </Col>
           <Col className="gridBox d-flex justify-content-center m-1">
