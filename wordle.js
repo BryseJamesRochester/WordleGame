@@ -4,7 +4,15 @@ const map = Array.prototype.map;
 
 
 /**
- * A Wordle object is used to play a game of wordle. 
+ * A Wordle object is used to play a game of wordle. Use wordle.play() to play a game.
+ * 
+ * 
+ *               --Things To Do--
+ * Currently only uses hello as word to guess. 
+ * Need to determine best way to get guess from frontend (probably a POST to /guess from frontend routed with express)
+ * Need to implement word selection. Requires choosing a random word from the database(eventually based on complexity and length)
+ * 
+ * 
  */
 export default class Wordle {
   
@@ -26,6 +34,10 @@ export default class Wordle {
     this.playing = false;    
     }
 
+
+    /**
+     * will eventually get random word from database based on complexity and length
+     */
     newWord(){
       this.word = "hello";
     }
@@ -35,25 +47,25 @@ export default class Wordle {
 
       while(this.playing)
         this.oneRound();
-    }
-
-    initializeNewGame(){
-      this.playing = true;
-      this.guesses = NUM_OF_GUESSES;
-      this.newWord();
-    }
-
+      }
+      
+      initializeNewGame(){
+        this.playing = true;
+        this.guesses = NUM_OF_GUESSES;
+        this.newWord();
+      }
+    
     checkResult(guess, matches){
       if (matches.reduce((x, y) => {return x+y}) === 0)
-        this.endGame("win");
+      this.endGame("win");
       else if (this.guesses < 1)
-        this.endGame();
+      this.endGame();
       else {
         this.outputResult(guess, matches);
       }
-        
+      
     }
-
+    
     outputResult(guess, matches) {
       let guessString = "";
       for(let letter of guess){
