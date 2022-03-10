@@ -1,18 +1,29 @@
 "use strict";
 
 const map = Array.prototype.map;
-const NUM_OF_GUESSES = 5;
-const WORD_LENGTH = 5;
 
 
-class Wordle { 
-  constructor() {
+/**
+ * A Wordle object is used to play a game of wordle. 
+ */
+export default class Wordle {
+  
+  /**Constructor of a wordle game requires the max number of guesses 
+   * player can make before losing and the length of the word. 
+   * The default for each of these is 5.
+   * Currently only uses hello as the word.
+   * 
+   * 
+   * @constructor 
+   * @param {Number} numGuesses - Max number of guesses player gets
+   * @param {Number} wordLength - The number letters in the word.
+   */
+  constructor(numGuesses, wordLength) {
     this.word = "hello";
-    this.guesses = NUM_OF_GUESSES;  
+    this.wordLength = wordLength;
+    this.guesses = numGuesses;  
     this.matches = [];
-    this.playing = false;
-        
-    
+    this.playing = false;    
     }
 
     newWord(){
