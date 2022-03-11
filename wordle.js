@@ -84,29 +84,3 @@ class Wordle {
   }
 
 }
-
-let wordle = new Wordle(5, 5);
-
-wordle.newGame();
-let { win, lose, matches } = wordle.makeGuess("ayyyo");
-console.log(`Guess:ayyyo win:${win} lose:${lose} matches:${matches} guesses:${wordle.guesses}`);
-({ win, lose, matches } = wordle.makeGuess("hiiii"));
-console.log(`Guess:hiiii win:${win} lose:${lose} matches:${matches} guesses:${wordle.guesses}`);
-({ win, lose, matches } = wordle.makeGuess("hello"));
-console.log(`Guess:hello win:${win} lose:${lose} matches:${matches} guesses:${wordle.guesses}`);
-
-wordle.newGame();
-({ win, lose, matches } = wordle.makeGuess("ayyyo"));
-console.log(`Guess:ayyyo win:${win} lose:${lose} matches:${matches} guesses:${wordle.guesses}`);
-({ win, lose, matches } = wordle.makeGuess("hiiii"));
-console.log(`Guess:hiiii win:${win} lose:${lose} matches:${matches} guesses:${wordle.guesses}`);
-({ win, lose, matches } = wordle.makeGuess("yyyyy"));
-console.log(`Guess:yyyyy win:${win} lose:${lose} matches:${matches} guesses:${wordle.guesses}`);
-({ win, lose, matches } = wordle.makeGuess("hiiii"));
-console.log(`Guess:hiiii win:${win} lose:${lose} matches:${matches} guesses:${wordle.guesses}`);
-({ win, lose, matches } = wordle.makeGuess("yyyyy"));
-console.log(`Guess:yyyyy win:${win} lose:${lose} matches:${matches} guesses:${wordle.guesses}`);
-({ win, lose, matches } = wordle.makeGuess("hiiii"));
-console.log(`Guess:hiiii win:${win} lose:${lose} matches:${matches} guesses:${wordle.guesses}`);
-({ win, lose, matches } = wordle.makeGuess("yyyyy"));
-console.log(`Guess:yyyyy win:${win} lose:${lose} matches:${matches} guesses:${wordle.guesses}`);
