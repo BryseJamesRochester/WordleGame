@@ -4,7 +4,8 @@ const map = Array.prototype.map;
 
 
 /**
- * A Wordle object is used to play a game of wordle. Use wordle.play() to play a game.
+ * A Wordle object is used to play a game of wordle.
+ * Use wordle.startGame() to start the game, and <worlde>.makeGuess to make a guess
  * 
  * 
  *               --Things To Do--
@@ -15,11 +16,10 @@ const map = Array.prototype.map;
  * 
  */
 export default class Wordle {
-  
+
   /**Constructor of a wordle game requires the max number of guesses 
    * player can make before losing and the length of the word. 
    * The default for each of these is 5.
-   * Currently only uses hello as the word.
    * 
    * 
    * @constructor 
@@ -27,109 +27,116 @@ export default class Wordle {
    * @param {Number} wordLength - The number letters in the word.
    */
   constructor(numGuesses, wordLength) {
-    this.word = "hello";
-    this.wordLength = wordLength;
-    this.guesses = numGuesses;  
+    this.WORD_LENGTH = wordLength;
+    this.MAX_GUESSES = numGuesses
     this.matches = [];
-    this.playing = false;    
-    }
+  }
 
 
-    /**
-     * will eventually get random word from database based on complexity and length
-     */
-    newWord(){
-      this.word = "hello";
-    }
+  /**
+   * will eventually get random word from database based on complexity and length
+   */
+  newWord() {
+    this.word = "hello";
+  }
 
-    play(){
-      this.initializeNewGame();
+  startGame() {
+    this.guesses = this.MAX_GUESSES;
+    this.newWord();
+  }
 
-      while(this.playing)
-        this.oneRound();
-      }
-      
-      initializeNewGame(){
-        this.playing = true;
-        this.guesses = NUM_OF_GUESSES;
-        this.newWord();
-      }
-    
-    checkResult(guess, matches){
-      if (matches.reduce((x, y) => {return x+y}) === 0)
-      this.endGame("win");
-      else if (this.guesses < 1)
-      this.endGame();
-      else {
-        this.outputResult(guess, matches);
-      }
-      
-    }
-    
-    outputResult(guess, matches) {
-      let guessString = "";
-      for(let letter of guess){
-        guessString+= letter + " ";
-      }
-      let matchString = "";
-      matches.forEach(match => match === 0 ? matchString += "M ": match === 1 ? matchString += "? " : matchString += "X ")
-      
-      console.log(guessString);
-      console.log(matchString);
-    }
+  makeGuess(guess) {
+    if (!this.validGuess(guess)) return undefined; //need to figure out best way to handle invalid guess
 
-    oneRound(){
-      this.guesses -= 1
-      let guess = this.getNextGuess();
-      this.matches = this.compareGuess(this.word, guess);
-      this.checkResult(guess, this.matches);
-    }
+    this.guesses -= 1;
+    let win = false;
+    let lose = false;
 
-    getNextGuess(){
-      let guess = prompt('Enter your guess:');
-      
-      while(!this.validGuess(guess)) 
-        guess = prompt("Enter a valid guess");
-      
-      return guess;
-    }
+    //matches is an array with a number for each letter, 0-Match, 1-Letter is elsewhere, 2-letter not present
+    let matches = this.compareGuess(guess.toLowerCase());
 
-    validGuess(guess){
-      if (guess.length !== WORD_LENGTH)
-        return false;
-      if (!/^[a-zA-Z]+$/.test(guess)) 
-        return false;
-      return true;
-    }
+    //if it reduces to 0, every letter is a match
+    if (matches.reduce((x, y) => { return x + y }) === 0)
+      win = true;
 
-    compareGuess(word, guess){
-      let matches = map.call(guess, (letter, i) => {
-          if (letter.toLowerCase() === word.charAt(i)) return 0;
-          if (word.includes(letter.toLowerCase())) return 1;
-          return 2;
-      })
-      return matches;
-    }
+    else if (this.numGuesses < 1)
+      lose = true;
 
-    endGame(result){
-      this.playing = false;
-      result === "win" ? this.win() : this.lose();
-    }
+    return { win: win, lose: lose, matches: matches };
 
-    win() {
-      if (prompt("You Win! Do you want to play again? (y/n)").toLowerCase() === "y" ){
-        this.initializeNewGame();
-      }
-    }
+  }
 
-    lose() {
-      if (prompt("You Lose! Do you want to play again? (y/n)").toLowerCase() === "y" )
-        this.initializeNewGame();
-    }
+  validGuess(guess) {
+    if (guess.length !== this.WORD_LENGTH)
+      return false;
+    if (!/^[a-zA-Z]+$/.test(guess))
+      return false;
+    return true;
+  }
 
+  compareGuess(guess) {
+    let matches = map.call(guess, (letter, i) => {
+      if (letter === this.word.charAt(i)) return 0;
+      if (this.word.includes(letter)) return 1;
+      return 2;
+    })
+    return matches;
+  }
+
+  // checkResult(guess, matches){
+  //   if (matches.reduce((x, y) => {return x+y}) === 0)
+  //   this.endGame("win");
+  //   else if (this.guesses < 1)
+  //   this.endGame();
+  //   else {
+  //     this.outputResult(guess, matches);
+  //   }
+  // }
+
+  // outputResult(guess, matches) {
+  //   let guessString = "";
+  //   for(let letter of guess){
+  //     guessString+= letter + " ";
+  //   }
+  //   let matchString = "";
+  //   matches.forEach(match => match === 0 ? matchString += "M ": match === 1 ? matchString += "? " : matchString += "X ")
+  //   console.log(guessString);
+  //   console.log(matchString);
+  // }
+
+
+  // oneRound(){
+  //   this.guesses -= 1
+  //   let guess = this.getNextGuess();
+  //   this.matches = this.compareGuess(this.word, guess);
+  //   this.checkResult(guess, this.matches);
+  // }
+
+
+  // getNextGuess(){
+  //   let guess = prompt('Enter your guess:');
+  //   while(!this.validGuess(guess)) 
+  //     guess = prompt("Enter a valid guess");
+  //   return guess;
+  // }
+
+
+  // endGame(result){
+  //   this.playing = false;
+  //   result === "win" ? this.win() : this.lose();
+  // }
+
+
+  // win() {
+  //   if (prompt("You Win! Do you want to play again? (y/n)").toLowerCase() === "y" ){
+  //     this.initializeNewGame();
+  //   }
+  // }
+
+
+  // lose() {
+  //   if (prompt("You Lose! Do you want to play again? (y/n)").toLowerCase() === "y" )
+  //     this.initializeNewGame();
+  // }
 
 }
-
-
-let wordle = new Wordle();
-wordle.play();
