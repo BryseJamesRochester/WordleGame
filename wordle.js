@@ -5,7 +5,7 @@ const map = Array.prototype.map;
 
 /**
  * A Wordle object is used to play a game of wordle.
- * Use wordle.startGame() to start the game, and <worlde>.makeGuess to make a guess
+ * Use wordle.newGame() to start the game, and <worlde>.makeGuess to make a guess
  * 
  * 
  *               --Things To Do--
@@ -15,7 +15,7 @@ const map = Array.prototype.map;
  * 
  * 
  */
-export default class Wordle {
+class Wordle {
 
   /**Constructor of a wordle game requires the max number of guesses 
    * player can make before losing and the length of the word. 
@@ -40,7 +40,7 @@ export default class Wordle {
     this.word = "hello";
   }
 
-  startGame() {
+  newGame() {
     this.guesses = this.MAX_GUESSES;
     this.newWord();
   }
@@ -59,7 +59,7 @@ export default class Wordle {
     if (matches.reduce((x, y) => { return x + y }) === 0)
       win = true;
 
-    else if (this.numGuesses < 1)
+    else if (this.guesses < 1)
       lose = true;
 
     return { win: win, lose: lose, matches: matches };
@@ -140,3 +140,29 @@ export default class Wordle {
   // }
 
 }
+
+let wordle = new Wordle(5, 5);
+
+wordle.newGame();
+let { win, lose, matches } = wordle.makeGuess("ayyyo");
+console.log(`Guess:ayyyo win:${win} lose:${lose} matches:${matches} guesses:${wordle.guesses}`);
+({ win, lose, matches } = wordle.makeGuess("hiiii"));
+console.log(`Guess:hiiii win:${win} lose:${lose} matches:${matches} guesses:${wordle.guesses}`);
+({ win, lose, matches } = wordle.makeGuess("hello"));
+console.log(`Guess:hello win:${win} lose:${lose} matches:${matches} guesses:${wordle.guesses}`);
+
+wordle.newGame();
+({ win, lose, matches } = wordle.makeGuess("ayyyo"));
+console.log(`Guess:ayyyo win:${win} lose:${lose} matches:${matches} guesses:${wordle.guesses}`);
+({ win, lose, matches } = wordle.makeGuess("hiiii"));
+console.log(`Guess:hiiii win:${win} lose:${lose} matches:${matches} guesses:${wordle.guesses}`);
+({ win, lose, matches } = wordle.makeGuess("yyyyy"));
+console.log(`Guess:yyyyy win:${win} lose:${lose} matches:${matches} guesses:${wordle.guesses}`);
+({ win, lose, matches } = wordle.makeGuess("hiiii"));
+console.log(`Guess:hiiii win:${win} lose:${lose} matches:${matches} guesses:${wordle.guesses}`);
+({ win, lose, matches } = wordle.makeGuess("yyyyy"));
+console.log(`Guess:yyyyy win:${win} lose:${lose} matches:${matches} guesses:${wordle.guesses}`);
+({ win, lose, matches } = wordle.makeGuess("hiiii"));
+console.log(`Guess:hiiii win:${win} lose:${lose} matches:${matches} guesses:${wordle.guesses}`);
+({ win, lose, matches } = wordle.makeGuess("yyyyy"));
+console.log(`Guess:yyyyy win:${win} lose:${lose} matches:${matches} guesses:${wordle.guesses}`);
