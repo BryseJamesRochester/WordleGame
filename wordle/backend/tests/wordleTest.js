@@ -1,6 +1,6 @@
 "use strict"
 
-let Wordle = require("./wordleGame.js");
+let Wordle = require("../wordleGame.js");
 
 let wordle = new Wordle(5,5);
 wordle.newGame();
