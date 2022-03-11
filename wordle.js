@@ -83,62 +83,6 @@ class Wordle {
     return matches;
   }
 
-  // checkResult(guess, matches){
-  //   if (matches.reduce((x, y) => {return x+y}) === 0)
-  //   this.endGame("win");
-  //   else if (this.guesses < 1)
-  //   this.endGame();
-  //   else {
-  //     this.outputResult(guess, matches);
-  //   }
-  // }
-
-  // outputResult(guess, matches) {
-  //   let guessString = "";
-  //   for(let letter of guess){
-  //     guessString+= letter + " ";
-  //   }
-  //   let matchString = "";
-  //   matches.forEach(match => match === 0 ? matchString += "M ": match === 1 ? matchString += "? " : matchString += "X ")
-  //   console.log(guessString);
-  //   console.log(matchString);
-  // }
-
-
-  // oneRound(){
-  //   this.guesses -= 1
-  //   let guess = this.getNextGuess();
-  //   this.matches = this.compareGuess(this.word, guess);
-  //   this.checkResult(guess, this.matches);
-  // }
-
-
-  // getNextGuess(){
-  //   let guess = prompt('Enter your guess:');
-  //   while(!this.validGuess(guess)) 
-  //     guess = prompt("Enter a valid guess");
-  //   return guess;
-  // }
-
-
-  // endGame(result){
-  //   this.playing = false;
-  //   result === "win" ? this.win() : this.lose();
-  // }
-
-
-  // win() {
-  //   if (prompt("You Win! Do you want to play again? (y/n)").toLowerCase() === "y" ){
-  //     this.initializeNewGame();
-  //   }
-  // }
-
-
-  // lose() {
-  //   if (prompt("You Lose! Do you want to play again? (y/n)").toLowerCase() === "y" )
-  //     this.initializeNewGame();
-  // }
-
 }
 
 let wordle = new Wordle(5, 5);
