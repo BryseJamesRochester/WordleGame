@@ -26,7 +26,7 @@ module.exports = class Wordle {
      * @param {Number} numGuesses - Max number of guesses player gets
      * @param {Number} wordLength - The number letters in the word.
      */
-    constructor(numGuesses, wordLength) {
+    constructor(numGuesses=5, wordLength=5) {
         this.WORD_LENGTH = wordLength;
         this.MAX_GUESSES = numGuesses
         this.matches = [];
