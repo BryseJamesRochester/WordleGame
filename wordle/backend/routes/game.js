@@ -16,13 +16,24 @@ router.route('/start').post((req, res) => {
 
 });
 
-router.route('/guess').post((req,res) => {
+router.route('/guess').post((req, res) => {
     const guess = req.body.guess;
-    let {win, lose, matches} = wordle.makeGuess(guess);
-    res.send(`win:${win} lose:${lose} matches:${matches} guesses:${wordle.guesses}`);
-    
+
+    let { win, lose, matches } = wordle.makeGuess(guess);
+
     //need to connect with frontend devs to see if they want to handle win and loss logic on frontend or if it should be done here
     //also need to check exactly what data they want returned
+    if (!!win) {
+
+        res.send(`win:${win} lose:${lose} matches:${matches} guesses:${wordle.guesses}`);
+
+    }
+    else {
+
+        res.send(`Invalid guess, Guesses remaining: ${wordle.guesses}`);
+    }
+
+    
 
 });
 

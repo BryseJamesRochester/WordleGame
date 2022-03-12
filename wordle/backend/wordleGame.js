@@ -46,7 +46,7 @@ module.exports = class Wordle {
     }
 
     makeGuess(guess) {
-        if (!this.validGuess(guess)) return undefined; //need to figure out best way to handle invalid guess
+        if (!this.validGuess(guess)) return {invalid:true}; //need to figure out best way to handle invalid guess
 
         this.guesses -= 1;
         let win = false;
