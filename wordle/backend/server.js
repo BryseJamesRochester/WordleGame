@@ -6,14 +6,23 @@ const mongoose = require('mongoose');
 
 require('dotenv').config();
 
+const myArgs = process.argv.slice(2).map((string) => string.toLowerCase());
+
 const app = express();
 const port = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
 
-const uri = process.env.ATLAS_URI;
-mongoose.connect(uri, {useNewUrlParser: true});
+
+//current jank way of swapping between db
+let temp;
+if (myArgs.includes('backupServer'.toLowerCase()))
+    temp = process.env.BRYSE_ATLAS_URI;
+else
+    temp = process.env.ATLAS_URI;
+const uri = temp;
+mongoose.connect(uri, { useNewUrlParser: true });
 const connection = mongoose.connection;
 
 connection.once('open', () => {
@@ -21,8 +30,12 @@ connection.once('open', () => {
 });
 
 const usersRouter = require('./routes/users');
+const wordleWordRouter = require('./routes/worldeWord');
+const gameRouter = require('./routes/game');
 
+app.use('/words', wordleWordRouter);
 app.use('/users', usersRouter);
+app.use('/game', gameRouter);
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`)
