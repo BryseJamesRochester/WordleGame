@@ -8,17 +8,17 @@ function Grid() {
     <div>
       <Container>
         <Row>
-          <Col className="gridBox d-flex justify-content-center m-1 h-100">
-            <Square letter="A" />
+          <Col className="gridBox d-flex justify-content-center m-1">
+            <Square letter="" />
           </Col>
           <Col className="gridBox d-flex justify-content-center m-1">
-            <Square letter="B" />
+            <Square letter="" />
           </Col>
           <Col className="gridBox d-flex justify-content-center m-1">
-            <Square letter="C" />
+            <Square letter="" />
           </Col>
           <Col className="gridBox d-flex justify-content-center m-1">
-            <Square letter="D" />
+            <Square letter="" />
           </Col>
           <Col className="gridBox d-flex justify-content-center m-1">
             <Square />
