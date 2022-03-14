@@ -7,8 +7,8 @@ function Keyboard() {
   return (
     <div>
       <Container>
-      <Row className="justify-content-md-center">
-          <Col md="auto">
+      <Row>
+          <Col className="d-flex justify-content-center">
           <div class='btn-group'>
             <Button variant="outline-dark">Q</Button>{' '}
             <Button variant="outline-dark">W</Button>{' '}
@@ -24,8 +24,8 @@ function Keyboard() {
           </div>
           </Col>
         </Row>
-        <Row className="justify-content-md-center">
-        <Col md="auto">
+        <Row>
+        <Col className="d-flex justify-content-center">
           <div class='btn-group'>
             <Button variant="outline-dark">A</Button>{' '}
             <Button variant="outline-dark">S</Button>{' '}
@@ -39,8 +39,8 @@ function Keyboard() {
           </div>
           </Col>
         </Row>
-        <Row className="justify-content-md-center">
-        <Col md="auto">
+        <Row>
+        <Col className="d-flex justify-content-center">
           <div class='btn-group'>
             <Button variant="outline-dark">ENTER</Button>{' '}
             <Button variant="outline-dark">Z</Button>{' '}
