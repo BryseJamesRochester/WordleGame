@@ -66,11 +66,20 @@ module.exports = class Wordle {
 
     }
 
+
+    /**
+     * 
+     * @param {string} guess 
+     * @returns 
+     */
     validGuess(guess) {
-        if (guess.length !== this.WORD_LENGTH)
+        if (guess.length != this.WORD_LENGTH){
             return false;
-        if (!/^[a-zA-Z]+$/.test(guess))
+        }
+        if (!/^[a-zA-Z]+$/.test(guess)){
             return false;
+        }
+            
         return true;
     }
 
