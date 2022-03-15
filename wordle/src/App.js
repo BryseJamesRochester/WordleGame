@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
+
+import Keyboard from './components/Keyboard.jsx'
+import 'bootstrap/dist/css/bootstrap.min.css'
+
 import Grid from "./components/Grid.jsx"
 import Keyboard from "./components/Keyboard.jsx"
 import { Container, Row, Col, Navbar, NavLink, Nav } from "react-bootstrap"
