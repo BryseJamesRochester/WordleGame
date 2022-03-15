@@ -10,7 +10,6 @@ const map = Array.prototype.map;
  * 
  *               --Things To Do--
  * Currently only uses hello as word to guess. 
- * Need to determine best way to get guess from frontend (probably a POST to /guess from frontend routed with express)
  * Need to implement word selection. Requires choosing a random word from the database(eventually based on complexity and length)
  * 
  * 
@@ -40,13 +39,26 @@ module.exports = class Wordle {
         this.word = "hello";
     }
 
+    /** 
+     * Initializes a new wordle game with the number of guesses set in the constructor. Picks a new word.
+    */
     newGame() {
         this.guesses = this.MAX_GUESSES;
         this.newWord();
     }
 
+    /**
+     * Makes a guess at the word. Ensures guess is valid and comapres it against the word.
+     * @param {string} guess - the guess
+     * @returns An object containing various properties. 
+     *          If guess is valid will return an object with {win, lose, matches}
+     *          win - true if guess was correct
+     *          lose - true if out of guesses
+     *          matches - array with info about each letter(0-match, 1-letter is in the word but in wrong place, 2-letter not in word)
+     */
     makeGuess(guess) {
         if (!this.validGuess(guess)) return {invalid:true}; //need to figure out best way to handle invalid guess
+        if (this.guesses < 1) return {invalid:true};
 
         this.guesses -= 1;
         let win = false;
@@ -62,18 +74,32 @@ module.exports = class Wordle {
         else if (this.guesses < 1)
             lose = true;
 
-        return { win: win, lose: lose, matches: matches, guesses: this.guesses };
+        return { win: win, lose: lose, matches: matches};
 
     }
 
+
+    /**
+     * Checks the guess is valid. A guess is valid if it is the correct length and is made of letters.
+     * @param {string} guess - guess to check
+     * @returns a boolean indicating if it is a valid guess
+     */
     validGuess(guess) {
-        if (guess.length !== this.WORD_LENGTH)
+        if (guess.length != this.WORD_LENGTH){
             return false;
-        if (!/^[a-zA-Z]+$/.test(guess))
+        }
+        if (!/^[a-zA-Z]+$/.test(guess)){
             return false;
+        }
+            
         return true;
     }
 
+    /**
+     * Does a letter by letter comparison of the guess and the word that is trying to be guessed
+     * @param {string} guess - the guess
+     * @returns array with info about each letter(0-match, 1-letter is in the word but in wrong place, 2-letter not in word)
+     */
     compareGuess(guess) {
         let matches = map.call(guess, (letter, i) => {
             if (letter === this.word.charAt(i)) return 0;
