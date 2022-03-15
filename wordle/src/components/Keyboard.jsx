@@ -60,8 +60,8 @@ function Keyboard() {
   return (
     <div>
       <Container>
-      <Row className="justify-content-md-center">
-          <Col md="auto">
+      <Row>
+          <Col className="d-flex justify-content-center">
           <div class='btn-group'>
             <Button id="key_q" variant="outline-dark" onClick={(handleClick())}>Q</Button>{' '}
             <Button id="key_w" variant="outline-dark">W</Button>{' '}
@@ -76,8 +76,8 @@ function Keyboard() {
           </div>
           </Col>
         </Row>
-        <Row className="justify-content-md-center">
-        <Col md="auto">
+        <Row>
+        <Col className="d-flex justify-content-center">
           <div class='btn-group'>
             <Button id="key_a" variant="outline-dark">A</Button>{' '}
             <Button id="key_s" variant="outline-dark">S</Button>{' '}
@@ -91,8 +91,8 @@ function Keyboard() {
           </div>
           </Col>
         </Row>
-        <Row className="justify-content-md-center">
-        <Col md="auto">
+        <Row>
+        <Col className="d-flex justify-content-center">
           <div class='btn-group'>
             <Button id="key_Enter" variant="outline-dark">ENTER</Button>{' '}
             <Button id="key_z" variant="outline-dark">Z</Button>{' '}
