@@ -2,7 +2,7 @@ import React from 'react'
 import Button from 'react-bootstrap/Button'
 import { Container, Row, Col } from 'react-bootstrap'
 
-
+var inputString = "";
 
 document.addEventListener('keyup', (event) => {
   const key_id = "key_"+event.key
@@ -22,6 +22,14 @@ document.addEventListener('keydown', (event) => {
   const key_id = "key_"+event.key
   if(document.getElementById(key_id) != null){
     document.getElementById(key_id).className += " active";
+    document.getElementById(key_id).click();
+    if(event.key != "Enter" || event.key != "Backspace")
+    inputString += event.key.toUpperCase();
+    console.log("input: " + inputString);
+    if(event.key === "Backspace"){
+      console.log(inputString.slice(0,-1));
+
+    }
   }
 })
 
@@ -29,9 +37,24 @@ document.removeEventListener('keydown', (event) => {
   const key_id = "key_"+event.key
   if(document.getElementById(key_id) != null){
     document.getElementById(key_id).className += " active";
+    document.getElementById(key_id).click();
+    if(event.key != "Enter" || event.key != "Backspace")
+    inputString += event.key.toUpperCase();
+    console.log("input: " + inputString);
+    if(event.key === "Backspace"){
+      console.log(inputString.slice(0,-1));
+
+    }
   }
 })
 
+function handleClick(){
+  // if(inputString.length > 5){
+  //   inputString += document.getElementById(keyId).text;
+  //   console.log(inputString);
+  // }
+  console.log("clicked");
+}
 
 function Keyboard() {
   return (
@@ -40,7 +63,7 @@ function Keyboard() {
       <Row className="justify-content-md-center">
           <Col md="auto">
           <div class='btn-group'>
-            <Button id="key_q" variant="outline-dark" >Q</Button>{' '}
+            <Button id="key_q" variant="outline-dark" onClick={(handleClick())}>Q</Button>{' '}
             <Button id="key_w" variant="outline-dark">W</Button>{' '}
             <Button id="key_e" variant="outline-dark">E</Button>{' '}
             <Button id="key_r" variant="outline-dark">R</Button>{' '}
