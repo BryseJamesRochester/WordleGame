@@ -10,7 +10,6 @@ const map = Array.prototype.map;
  * 
  *               --Things To Do--
  * Currently only uses hello as word to guess. 
- * Need to determine best way to get guess from frontend (probably a POST to /guess from frontend routed with express)
  * Need to implement word selection. Requires choosing a random word from the database(eventually based on complexity and length)
  * 
  * 
