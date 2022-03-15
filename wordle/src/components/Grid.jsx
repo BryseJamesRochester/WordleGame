@@ -9,7 +9,7 @@ function Grid() {
       <Container>
         <Row>
           <Col className="gridBox d-flex justify-content-center m-1">
-            <Square letter="" />
+            <Square letter="B" guess=""/>
           </Col>
           <Col className="gridBox d-flex justify-content-center m-1">
             <Square letter="" />
