@@ -6,10 +6,9 @@ import Keyboard from './components/Keyboard.jsx'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 import Grid from "./components/Grid.jsx"
-import Keyboard from "./components/Keyboard.jsx"
 import { Container, Row, Col, Navbar, NavLink, Nav } from "react-bootstrap"
 import "bootstrap/dist/css/bootstrap.min.css"
-import Login from '../Login/Login';
+import Login from './components/Login/Login';
 import useToken from './useToken';
 
 function setToken(userToken) {
