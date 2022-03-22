@@ -30,20 +30,26 @@ document.addEventListener('keydown', (event) => {
     if(event.key === "Enter"){
       if(currInput.length === 5){
         guesses[guessCount] = currInput;
-        currInput = "";
+       
         guessCount = guessCount + 1;
         console.log(JSON.stringify(guesses));
+        currInput = "";
       }
     }
     if(event.key === "Backspace"){
       if(currInput.length > 0){
       currInput = currInput.slice(0,currInput.length-1);
-      console.log(currInput);
+      guesses[guessCount] = currInput;
+      console.log(JSON.stringify(guesses));
       }
     }
     else if(currInput.length < maxSize){
       currInput = currInput + event.key.toUpperCase();
-      console.log(currInput);
+      if(event.which === 13){
+        currInput = "";
+      }
+      guesses[guessCount] = currInput;
+      console.log(JSON.stringify(guesses));
     }
 }
 })
@@ -52,27 +58,30 @@ document.removeEventListener('keydown', (event) => {
   if(document.getElementById(key_id) !== null && guessCount < maxSize){
     document.getElementById(key_id).className += " active";
     document.getElementById(key_id).click();
-    var enter = "Enter";
+ 
     if(event.key === "Enter"){
       if(currInput.length === 5){
         guesses[guessCount] = currInput;
-        currInput = "";
+       
         guessCount = guessCount + 1;
         console.log(JSON.stringify(guesses));
+        currInput = "";
       }
-      else
-        console.log("Please input 5 characters");
     }
     if(event.key === "Backspace"){
       if(currInput.length > 0){
       currInput = currInput.slice(0,currInput.length-1);
-      console.log(currInput);
+      guesses[guessCount] = currInput;
+      console.log(JSON.stringify(guesses));
       }
     }
-    if(currInput.length < maxSize && event.key !== enter){
-      console.log(event.key);
-      currInput += event.key.toUpperCase();
-      console.log(currInput);
+    else if(currInput.length < maxSize){
+      currInput = currInput + event.key.toUpperCase();
+      if(event.which === 13){
+        currInput = "";
+      }
+      guesses[guessCount] = currInput;
+      console.log(JSON.stringify(guesses));
     }
 }
 })
