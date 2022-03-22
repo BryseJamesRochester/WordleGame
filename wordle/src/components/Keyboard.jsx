@@ -1,33 +1,97 @@
 import React from 'react'
 import Button from 'react-bootstrap/Button'
 import { Container, Row, Col } from 'react-bootstrap'
-import $ from 'jquery'
+
+var guesses = ["","","","",""];
+var currInput = "";
+var maxSize = 5;
+var guessCount = 0;
 
 
 document.addEventListener('keyup', (event) => {
   const key_id = "key_"+event.key
-  console.log(document.getElementById(key_id).className);
   if(document.getElementById(key_id) != null){
     document.getElementById(key_id).className = "btn btn-outline-dark";
   }
 })
 
-document.addEventListener('keydown', (event) => {
+document.removeEventListener('keyup', (event) => {
   const key_id = "key_"+event.key
-  console.log(key_id + " pressed");
   if(document.getElementById(key_id) != null){
-    document.getElementById(key_id).className += " active";
+    document.getElementById(key_id).className = "btn btn-outline-dark";
   }
 })
+document.addEventListener('keydown', (event) => {
+  const key_id = "key_"+event.key
+  if(document.getElementById(key_id) !== null && guessCount < maxSize){
+    document.getElementById(key_id).className += " active";
+    document.getElementById(key_id).click();
+ 
+    if(event.key === "Enter"){
+      if(currInput.length === 5){
+        guesses[guessCount] = currInput;
+        currInput = "";
+        guessCount = guessCount + 1;
+        console.log(JSON.stringify(guesses));
+      }
+    }
+    if(event.key === "Backspace"){
+      if(currInput.length > 0){
+      currInput = currInput.slice(0,currInput.length-1);
+      console.log(currInput);
+      }
+    }
+    else if(currInput.length < maxSize){
+      currInput = currInput + event.key.toUpperCase();
+      console.log(currInput);
+    }
+}
+})
+document.removeEventListener('keydown', (event) => {
+  const key_id = "key_"+event.key
+  if(document.getElementById(key_id) !== null && guessCount < maxSize){
+    document.getElementById(key_id).className += " active";
+    document.getElementById(key_id).click();
+    var enter = "Enter";
+    if(event.key === "Enter"){
+      if(currInput.length === 5){
+        guesses[guessCount] = currInput;
+        currInput = "";
+        guessCount = guessCount + 1;
+        console.log(JSON.stringify(guesses));
+      }
+      else
+        console.log("Please input 5 characters");
+    }
+    if(event.key === "Backspace"){
+      if(currInput.length > 0){
+      currInput = currInput.slice(0,currInput.length-1);
+      console.log(currInput);
+      }
+    }
+    if(currInput.length < maxSize && event.key !== enter){
+      console.log(event.key);
+      currInput += event.key.toUpperCase();
+      console.log(currInput);
+    }
+}
+})
+function handleClick(){
+  // if(inputString.length > 5){
+  //   inputString += document.getElementById(keyId).text;
+  //   console.log(inputString);
+  // }
+  console.log("clicked");
+}
 
 function Keyboard() {
   return (
     <div>
       <Container>
-      <Row className="justify-content-md-center">
-          <Col md="auto">
+      <Row>
+          <Col className="d-flex justify-content-center">
           <div class='btn-group'>
-            <Button id="key_q" variant="outline-dark">Q</Button>{' '}
+            <Button id="key_q" variant="outline-dark" onClick={(handleClick())}>Q</Button>{' '}
             <Button id="key_w" variant="outline-dark">W</Button>{' '}
             <Button id="key_e" variant="outline-dark">E</Button>{' '}
             <Button id="key_r" variant="outline-dark">R</Button>{' '}
@@ -40,8 +104,8 @@ function Keyboard() {
           </div>
           </Col>
         </Row>
-        <Row className="justify-content-md-center">
-        <Col md="auto">
+        <Row>
+        <Col className="d-flex justify-content-center">
           <div class='btn-group'>
             <Button id="key_a" variant="outline-dark">A</Button>{' '}
             <Button id="key_s" variant="outline-dark">S</Button>{' '}
@@ -55,8 +119,8 @@ function Keyboard() {
           </div>
           </Col>
         </Row>
-        <Row className="justify-content-md-center">
-        <Col md="auto">
+        <Row>
+        <Col className="d-flex justify-content-center">
           <div class='btn-group'>
             <Button id="key_Enter" variant="outline-dark">ENTER</Button>{' '}
             <Button id="key_z" variant="outline-dark">Z</Button>{' '}
