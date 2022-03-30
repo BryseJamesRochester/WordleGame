@@ -1,8 +1,15 @@
 let WordListService = require('../services/wordlist.service');    
 let Wordle = require("../wordleGame");
 
+//used to hold game object
 let wordleGame;
 
+/**
+ * Used to start a new wordle game. 
+ * Request body can set numGuesses and wordLength, both are 5 by default.
+ * Request body can also contain a difficulty parameter which will select words based on assigned difficulty
+ * Returns a message indicating game was staarted successfully, or an error message if an error occurred
+ */
 const startGame = async function(req, res, next) {
     let difficulty = req.body.difficulty ? req.body.difficulty : 'all';
     let numGuesses = req.body.numGuesses ? req.body.numGuesses : 5;
@@ -17,6 +24,10 @@ const startGame = async function(req, res, next) {
     }
 }
 
+/**
+ * Used to make a guess in an existing wordle game. Game must be started before this can be called.
+ * Request body must contain a guess 
+ */
 const makeGuess = async function(req, res, next) {
     const guess = req.body.guess;
     let { win, lose, matches, invalid } = wordleGame.makeGuess(guess);

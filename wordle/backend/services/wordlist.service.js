@@ -1,6 +1,11 @@
 let DefaultWordList = require('../models/DefaultWordList.model')
 
-exports.getDefaultWordList = async function (difficulty) {
+/**
+ * Gets the default word list from database, selecting words based on difficullty
+ * @param {String} difficulty 
+ * @returns array containing only the words from the db
+ */
+const getDefaultWordList = async function (difficulty) {
 
     try {
         let filter = difficulty === 'all' ? {} : {key:difficulty};
@@ -12,3 +17,5 @@ exports.getDefaultWordList = async function (difficulty) {
         throw Error(`Error getting default Word List`);
     }
 }
+
+module.exports = {getDefaultWordList};
