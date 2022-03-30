@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const secretWordSchema = new Schema({
+const defaultWordListSchema = new Schema({
     word: {
         type: String,
         required: true,
@@ -17,5 +17,5 @@ const secretWordSchema = new Schema({
     collection: 'dictionary'
 });
 
-const SecretWord = mongoose.model('SecretWord', secretWordSchema);
-module.exports = SecretWord;
+const DefaultWordList = mongoose.model('DefaultWordList', defaultWordListSchema);
+module.exports = DefaultWordList;
