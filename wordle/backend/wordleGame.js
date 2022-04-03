@@ -25,10 +25,11 @@ module.exports = class Wordle {
      * @param {Number} numGuesses - Max number of guesses player gets
      * @param {Number} wordLength - The number letters in the word.
      */
-    constructor(numGuesses=5, wordLength=5) {
+    constructor(numGuesses=5, wordLength=5, wordList = ['hello', 'match']) {
         this.WORD_LENGTH = wordLength;
         this.MAX_GUESSES = numGuesses
         this.matches = [];
+        this.wordList = wordList; 
     }
 
 
@@ -36,8 +37,10 @@ module.exports = class Wordle {
      * will eventually get random word from database based on complexity and length
      */
     newWord() {
-        this.word = "hello";
+        let selectedWord = Math.floor(Math.random() * (this.wordList.length - 1));
+        this.word = this.wordList[selectedWord];
     }
+
 
     /** 
      * Initializes a new wordle game with the number of guesses set in the constructor. Picks a new word.

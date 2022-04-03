@@ -17,7 +17,7 @@ app.use(express.json());
 
 //current jank way of swapping between db
 let temp;
-if (myArgs.includes('backupServer'.toLowerCase()))
+if (myArgs.includes('backupdb'.toLowerCase()))
     temp = process.env.BRYSE_ATLAS_URI;
 else
     temp = process.env.ATLAS_URI;
