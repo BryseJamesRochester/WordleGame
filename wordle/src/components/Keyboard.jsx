@@ -6,30 +6,77 @@ var guesses = ["","","","",""];
 var currInput = "";
 var maxSize = 5;
 var guessCount = 0;
-
+var corrGuess = "HELLO"
+var corrChar = ["H","E","L","O"];
+var defaultColor = "btn btn-outline-dark";
+var defaultColorPressed = "btn btn-outline-dark active";
+var yellow = "btn btn-warning"; 
+var yellowPressed = "btn btn-warning active";
+var green = "btn btn-success"; 
+var greenPressed = "btn btn-success active";
+var gray = "btn btn-secondary";
+var grayPressed = "btn btn-secondary active";
 
 document.addEventListener('keyup', (event) => {
   const key_id = "key_"+event.key
   if(document.getElementById(key_id) != null){
-    document.getElementById(key_id).className = "btn btn-outline-dark";
+
+    switch(document.getElementById(key_id).className){
+      case defaultColorPressed:
+        document.getElementById(key_id).className = defaultColor;
+        break;
+      case yellowPressed:
+        document.getElementById(key_id).className = yellow;
+        break;
+      case greenPressed:
+        document.getElementById(key_id).className = green;
+        break;
+      case grayPressed:
+        document.getElementById(key_id).className = gray;
+        break;
+    }
   }
 })
 
-document.removeEventListener('keyup', (event) => {
-  const key_id = "key_"+event.key
-  if(document.getElementById(key_id) != null){
-    document.getElementById(key_id).className = "btn btn-outline-dark";
-  }
-})
 document.addEventListener('keydown', (event) => {
-  const key_id = "key_"+event.key
+  var key_id = "key_"+event.key
   if(document.getElementById(key_id) !== null && guessCount < maxSize){
-    document.getElementById(key_id).className += " active";
-    document.getElementById(key_id).click();
- 
+    switch(document.getElementById(key_id).className){
+      case defaultColor:
+        document.getElementById(key_id).className = defaultColorPressed;
+        break;
+      case yellow: 
+        document.getElementById(key_id).className = yellowPressed;
+        break;
+      case green:
+        document.getElementById(key_id).className = greenPressed;
+        break;
+      case gray:
+        document.getElementById(key_id).className = grayPressed;
+        break;
+    }
     if(event.key === "Enter"){
       if(currInput.length === 5){
         guesses[guessCount] = currInput;
+        for(let i = 0; i<currInput.length;i++){
+          var inputChar = currInput.charAt(i);
+          key_id = "key_" + inputChar.toLowerCase();
+          var corrLetter = false;
+          var inPosition = inputChar === corrGuess.charAt(i);
+          for(let j = 0; j < corrChar.length;j++){
+            if(corrChar[j] === inputChar){
+              corrLetter = true;
+              break;
+            }
+          }
+          if(corrLetter)
+            document.getElementById(key_id).className = yellow;
+          if(inPosition)
+            document.getElementById(key_id).className = green;
+          else if(!corrLetter)
+            document.getElementById(key_id).className = gray;
+            
+        }
         currInput = "";
         guessCount = guessCount + 1;
         console.log(JSON.stringify(guesses));
@@ -42,40 +89,15 @@ document.addEventListener('keydown', (event) => {
       }
     }
     else if(currInput.length < maxSize){
-      currInput = currInput + event.key.toUpperCase();
-      console.log(currInput);
+      if(!(event.which === 13)){
+        currInput = currInput + event.key.toUpperCase();
+        console.log(currInput);
+      }
+      
     }
 }
 })
-document.removeEventListener('keydown', (event) => {
-  const key_id = "key_"+event.key
-  if(document.getElementById(key_id) !== null && guessCount < maxSize){
-    document.getElementById(key_id).className += " active";
-    document.getElementById(key_id).click();
-    var enter = "Enter";
-    if(event.key === "Enter"){
-      if(currInput.length === 5){
-        guesses[guessCount] = currInput;
-        currInput = "";
-        guessCount = guessCount + 1;
-        console.log(JSON.stringify(guesses));
-      }
-      else
-        console.log("Please input 5 characters");
-    }
-    if(event.key === "Backspace"){
-      if(currInput.length > 0){
-      currInput = currInput.slice(0,currInput.length-1);
-      console.log(currInput);
-      }
-    }
-    if(currInput.length < maxSize && event.key !== enter){
-      console.log(event.key);
-      currInput += event.key.toUpperCase();
-      console.log(currInput);
-    }
-}
-})
+
 function handleClick(){
   // if(inputString.length > 5){
   //   inputString += document.getElementById(keyId).text;
@@ -91,7 +113,7 @@ function Keyboard() {
       <Row>
           <Col className="d-flex justify-content-center">
           <div class='btn-group'>
-            <Button id="key_q" variant="outline-dark" onClick={(handleClick())}>Q</Button>{' '}
+            <Button id="key_q" variant="outline-dark">Q</Button>{' '}
             <Button id="key_w" variant="outline-dark">W</Button>{' '}
             <Button id="key_e" variant="outline-dark">E</Button>{' '}
             <Button id="key_r" variant="outline-dark">R</Button>{' '}
