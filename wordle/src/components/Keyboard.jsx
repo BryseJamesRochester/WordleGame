@@ -80,12 +80,14 @@ document.addEventListener('keydown', (event) => {
         currInput = "";
         guessCount = guessCount + 1;
         console.log(JSON.stringify(guesses));
+        currInput = "";
       }
     }
     if(event.key === "Backspace"){
       if(currInput.length > 0){
       currInput = currInput.slice(0,currInput.length-1);
-      console.log(currInput);
+      guesses[guessCount] = currInput;
+      console.log(JSON.stringify(guesses));
       }
     }
     else if(currInput.length < maxSize){
@@ -93,7 +95,39 @@ document.addEventListener('keydown', (event) => {
         currInput = currInput + event.key.toUpperCase();
         console.log(currInput);
       }
-      
+    }
+}
+})
+document.removeEventListener('keydown', (event) => {
+  const key_id = "key_"+event.key
+  if(document.getElementById(key_id) !== null && guessCount < maxSize){
+    document.getElementById(key_id).className += " active";
+    document.getElementById(key_id).click();
+ 
+    if(event.key === "Enter"){
+      if(currInput.length === 5){
+        guesses[guessCount] = currInput;
+       
+        guessCount = guessCount + 1;
+        console.log(JSON.stringify(guesses));
+        currInput = "";
+      }
+    }
+    if(event.key === "Backspace"){
+      if(currInput.length > 0){
+      currInput = currInput.slice(0,currInput.length-1);
+      guesses[guessCount] = currInput;
+      console.log(JSON.stringify(guesses));
+      }
+    }
+    else if(currInput.length < maxSize){
+      currInput = currInput + event.key.toUpperCase();
+      if(event.which === 13){
+        currInput = "";
+      }
+      guesses[guessCount] = currInput;
+      console.log(JSON.stringify(guesses));
+
     }
 }
 })
