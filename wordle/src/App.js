@@ -6,10 +6,9 @@ import Keyboard from './components/Keyboard.jsx'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 import Grid from "./components/Grid.jsx"
-import Keyboard from "./components/Keyboard.jsx"
 import { Container, Row, Col, Navbar, NavLink, Nav } from "react-bootstrap"
 import "bootstrap/dist/css/bootstrap.min.css"
-import Login from '../Login/Login';
+import Login from './components/Login/Login';
 import useToken from './useToken';
 
 function setToken(userToken) {
@@ -26,7 +25,7 @@ function App() {
   const token = getToken();
 
   if(!token) {
-    return <Login setToken={setToken} />
+    //return <Login setToken={setToken} />
   }
 
   return (
@@ -43,7 +42,7 @@ function App() {
       </Navbar>
       <Container className="mw-50">
         <Col md={{ span: 6, offset: 3 }}>
-        <Grid />
+        <Grid/>
         <Keyboard />
         </Col>
       </Container>
