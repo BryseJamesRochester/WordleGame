@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import { Container, Row, Col } from 'react-bootstrap'
+
 
 var guesses = ["","","","",""];
 var currInput = "";
@@ -95,39 +96,7 @@ document.addEventListener('keydown', (event) => {
         currInput = currInput + event.key.toUpperCase();
         console.log(currInput);
       }
-    }
-}
-})
-document.removeEventListener('keydown', (event) => {
-  const key_id = "key_"+event.key
-  if(document.getElementById(key_id) !== null && guessCount < maxSize){
-    document.getElementById(key_id).className += " active";
-    document.getElementById(key_id).click();
- 
-    if(event.key === "Enter"){
-      if(currInput.length === 5){
-        guesses[guessCount] = currInput;
-       
-        guessCount = guessCount + 1;
-        console.log(JSON.stringify(guesses));
-        currInput = "";
-      }
-    }
-    if(event.key === "Backspace"){
-      if(currInput.length > 0){
-      currInput = currInput.slice(0,currInput.length-1);
-      guesses[guessCount] = currInput;
-      console.log(JSON.stringify(guesses));
-      }
-    }
-    else if(currInput.length < maxSize){
-      currInput = currInput + event.key.toUpperCase();
-      if(event.which === 13){
-        currInput = "";
-      }
-      guesses[guessCount] = currInput;
-      console.log(JSON.stringify(guesses));
-
+      
     }
 }
 })
@@ -141,13 +110,35 @@ function handleClick(){
 }
 
 function Keyboard() {
+  const [input, updateInput] = useState([]);
+  const [guessCount,updateCount] = useState(0);
+  useEffect(() => {
+    if(guesses.length === 5){
+      console.log(input.join(""));
+      guesses[guessCount - 1] = input.join("");
+      console.log(guesses);
+    }
+    else{
+      console.log(input);
+    }
+  },[guessCount])
+
+  useEffect(() => {
+    if(input.length > 5){
+      input.pop();
+      console.log(input);
+    }
+  },[input])
+
   return (
+
     <div>
       <Container>
       <Row>
           <Col className="d-flex justify-content-center">
           <div class='btn-group'>
-            <Button id="key_q" variant="outline-dark">Q</Button>{' '}
+            <Button id="key_q" variant="outline-dark" onClick={() =>
+             updateInput([...input,"Q"])}>Q</Button>{' '}
             <Button id="key_w" variant="outline-dark">W</Button>{' '}
             <Button id="key_e" variant="outline-dark">E</Button>{' '}
             <Button id="key_r" variant="outline-dark">R</Button>{' '}
@@ -178,7 +169,8 @@ function Keyboard() {
         <Row>
         <Col className="d-flex justify-content-center">
           <div class='btn-group'>
-            <Button id="key_Enter" variant="outline-dark">ENTER</Button>{' '}
+            <Button id="key_Enter" variant="outline-dark" onClick={()=>
+            updateCount(guessCount+1)}>ENTER</Button>{' '}
             <Button id="key_z" variant="outline-dark">Z</Button>{' '}
             <Button id="key_x" variant="outline-dark">X</Button>{' '}
             <Button id="key_c" variant="outline-dark">C</Button>{' '}
