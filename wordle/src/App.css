@@ -28,6 +28,25 @@
   color: #61dafb;
 }
 
+
+.btn-success{
+  border-color: black!important;
+}
+
+.btn-warning{
+  border-color: black!important;
+}
+
+.btn-secondary{
+  border-color: black!important;
+}
+
+.btn{
+  margin: 4px;
+  border-radius: 8px!important;
+}
+
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
