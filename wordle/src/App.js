@@ -25,7 +25,7 @@ function App() {
   const token = getToken();
 
   if(!token) {
-    return <Login setToken={setToken} />
+    //return <Login setToken={setToken} />
   }
 
   return (
@@ -42,7 +42,7 @@ function App() {
       </Navbar>
       <Container className="mw-50">
         <Col md={{ span: 6, offset: 3 }}>
-        <Grid />
+        <Grid/>
         <Keyboard />
         </Col>
       </Container>
