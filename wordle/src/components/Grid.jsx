@@ -1,8 +1,11 @@
-import React from "react"
+import React, { useContext } from "react"
+import { AppContext } from "../App"
 import { Container, Row, Col } from "react-bootstrap"
 import Square from "./Square"
+import { gridDefault } from "./Words"
 
 function Grid() {
+  const { board } = useContext(AppContext)
   return (
     <div>
       <Container className="gridBox d-flex justify-content-center flex-nowrap">
