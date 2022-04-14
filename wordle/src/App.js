@@ -10,7 +10,7 @@ import { Container, Row, Col, Navbar, NavLink, Nav } from "react-bootstrap"
 import "bootstrap/dist/css/bootstrap.min.css"
 import Login from "./components/Login/Login"
 import useToken from "./useToken"
-import { boardDefault } from "./components/Words"
+import { boardDefault, wordAnswer } from "./components/Words"
 
 
 export const AppContext = createContext()
@@ -48,7 +48,7 @@ function App() {
       </Navbar>
       <Container className="mw-50">
         <Col md={{ span: 6, offset: 3 }}>
-          <AppContext.Provider value={{ board, setBoard }}>
+          <AppContext.Provider value={{ board, setBoard, wordAnswer }}>
             <Grid />
             <Keyboard />
           </AppContext.Provider>
