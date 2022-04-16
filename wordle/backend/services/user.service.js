@@ -22,4 +22,16 @@ const updateUserGameState = async function(username, gamestate) {
     }
 }
 
-module.exports = {getUserGameState, updateUserGameState};
+const addUser = async function(username) {
+    try {
+        const newUser = new User({username});
+        await newUser.save()
+    } catch(e) {
+        throw Error(`Error adding user`)
+    }
+    
+}
+
+
+
+module.exports = {getUserGameState, updateUserGameState, addUser};
