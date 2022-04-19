@@ -1,11 +1,10 @@
 let DefaultWordList = require('../models/DefaultWordList.model')
-
 /**
  * Gets the default word list from database, selecting words based on difficullty
  * @param {String} difficulty 
  * @returns array containing only the words from the db
  */
-const getDefaultWordList = async function (difficulty) {
+ const getDefaultWordList = async function (difficulty) {
 
     try {
         let filter = difficulty === 'all' ? {} : {key:difficulty};
