@@ -28,10 +28,19 @@ const addUser = async function(username) {
         await newUser.save()
     } catch(e) {
         throw Error(`Error adding user`)
+    }   
+}
+
+const getUser = async function(username) {
+    try {
+        let filter = {username};
+        let doc = await User.findOne(filter).exec();
+        return doc;
+    } catch(e) {
+        throw Error(`Error getting user ${username}`);
     }
-    
 }
 
 
 
-module.exports = {getUserGameState, updateUserGameState, addUser};
+module.exports = {getUserGameState, updateUserGameState, addUser, getUser};
