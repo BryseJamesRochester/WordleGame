@@ -1,8 +1,11 @@
-import React from "react"
-import { wordAnswer, boardDefault, guesses } from "./Words"
+import React, {useContext} from "react"
+import { AppContext } from "../App"
+import { wordAnswer, boardDefault } from "./Words"
 
 function Square(props) {
-  if (guesses[props.col][props.row] == "0") {
+  const boardData = useContext(AppContext);
+
+  if (boardData.currentGuesses[props.col][props.row] == "0") {
     return (
       <svg width="110" height="110" viewBox="0 0 110 110">
         <g>
@@ -29,7 +32,7 @@ function Square(props) {
         </g>
       </svg>
     )
-  } else if (guesses[props.col][props.row] == "1") {
+  } else if (boardData.currentGuesses[props.col][props.row] == "1") {
     return (
       <svg width="110" height="110" viewBox="0 0 110 110">
         <g>
@@ -56,7 +59,7 @@ function Square(props) {
         </g>
       </svg>
     )
-  } else if (guesses[props.col][props.row] == "2") {
+  } else if (boardData.currentGuesses[props.col][props.row] == "2") {
     return (
       <svg width="110" height="110" viewBox="0 0 110 110">
         <g>
