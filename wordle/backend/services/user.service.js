@@ -1,46 +1,46 @@
-let User = require('../models/user.model');
+let { User } = require('../models/user.model');
 
-const getUserGameState = async function(username){
-    
+const getUserGameState = async function (username) {
+
     try {
-        let filter = {username};
+        let filter = { username };
         let projection = 'gamestate -_id';
         let doc = await User.findOne(filter).select(projection).exec();
         gamestate = doc.gamestate;
         return gamestate;
-    } catch(e) {
+    } catch (e) {
         throw Error(`Error getting ${username} gamestate`);
     }
 }
 
-const updateUserGameState = async function(username, gamestate) {
+const updateUserGameState = async function (username, gamestate) {
     try {
-        await User.updateOne({username:username},{gamestate:gamestate});
+        await User.updateOne({ username: username }, { gamestate: gamestate });
         return true;
     } catch (e) {
         throw Error(`Error updating ${username} gamestate`);
     }
 }
 
-const addUser = async function(username) {
+const addUser = async function (username) {
     try {
-        const newUser = new User({username});
-        await newUser.save()
-    } catch(e) {
-        throw Error(`Error adding user`)
-    }   
+        const newUser = new User({ username });
+        return await newUser.save();
+    } catch (e) {
+        throw Error(`Error adding user. Meesage: ${e.message}`);
+    }
 }
 
-const getUser = async function(username) {
+const getUser = async function (username) {
     try {
-        let filter = {username};
+        let filter = { username };
         let doc = await User.findOne(filter).exec();
         return doc;
-    } catch(e) {
+    } catch (e) {
         throw Error(`Error getting user ${username}`);
     }
 }
 
 
 
-module.exports = {getUserGameState, updateUserGameState, addUser, getUser};
+module.exports = { getUserGameState, updateUserGameState, addUser, getUser };
