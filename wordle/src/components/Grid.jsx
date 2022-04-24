@@ -4,7 +4,7 @@ import { Container, Row, Col } from "react-bootstrap"
 import Square from "./Square"
 
 function Grid() {
-  const { board } = useContext(AppContext)
+  const { board, boardCurrent } = useContext(AppContext)
   return (
     <div>
       <Container className="gridBox d-flex justify-content-center flex-nowrap">

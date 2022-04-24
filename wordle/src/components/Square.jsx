@@ -1,7 +1,10 @@
-import React from "react"
-import { wordAnswer, boardDefault, guesses } from "./Words"
+import React, { useContext } from "react"
+import { AppContext } from "../App"
+import { wordAnswer, guesses } from "./Words"
 
 function Square(props) {
+  const { boardCurrent } = useContext(AppContext)
+
   if (guesses[props.col][props.row] == "0") {
     return (
       <svg width="110" height="110" viewBox="0 0 110 110">
@@ -24,7 +27,7 @@ function Square(props) {
             font-size="35"
             fill="black"
           >
-            {boardDefault[props.col][props.row]}
+            {boardCurrent[props.col][props.row]}
           </text>
         </g>
       </svg>
@@ -51,7 +54,7 @@ function Square(props) {
             font-size="35"
             fill="black"
           >
-            {boardDefault[props.col][props.row]}
+            {boardCurrent[props.col][props.row]}
           </text>
         </g>
       </svg>
@@ -78,7 +81,7 @@ function Square(props) {
             font-size="35"
             fill="black"
           >
-            {boardDefault[props.col][props.row]}
+            {boardCurrent[props.col][props.row]}
           </text>
         </g>
       </svg>
@@ -106,7 +109,7 @@ function Square(props) {
             font-size="35"
             fill="black"
           >
-            {boardDefault[props.col][props.row]}
+            {boardCurrent[props.col][props.row]}
           </text>
         </g>
       </svg>
