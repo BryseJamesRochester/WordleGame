@@ -2,6 +2,12 @@ const User = require('../models/user.model');
 const UserService = require('../services/user.service');
 const CustomWordListService = require('../services/customWordList.service')
 
+
+/**
+ * Adds a user to the database.
+ * Request Parameters:
+ *  req.body.username - name of the user
+ */
 const addUser = async function (req, res, next) {
     try {
         const username = req.body.username;
@@ -14,6 +20,11 @@ const addUser = async function (req, res, next) {
     }
 }
 
+/**
+ * Gets a user from the database.
+ * Request Parameters:
+ *  req.body.username - name of the user
+ */
 const getUser = async function (req, res, next) {
     try {
         const username = req.body.username;
@@ -27,6 +38,13 @@ const getUser = async function (req, res, next) {
     }
 }
 
+/**
+ * Adds a word list to the specified users array of custom word lists.
+ * Request Parameters:
+ *  req.body.username - name of the user adding the word list
+ *  req.body.wordListName - name of the word list.
+ *  req.body.wordList - array of words to be included in the word list. Words must all be the same length.
+ */
 const addWordList = async function (req, res, next) {
     const username = req.body.username;
     const wordListName = req.body.wordListName;
@@ -40,6 +58,11 @@ const addWordList = async function (req, res, next) {
     }
 }
 
+/**
+ * Retrieves all of the user's custom word lists
+ * Request Parameters:
+ *  req.body.username - name of the user
+ */
 const getAllWordLists = async function (req, res, next) {
     const username = req.body.username;
 
@@ -51,6 +74,12 @@ const getAllWordLists = async function (req, res, next) {
     }
 }
 
+/**
+ * Deletes the word list from the user's array of custom word lists.
+ * Request Parameters:
+ *  req.body.username - name of the user adding the word list
+ *  req.body.wordListName - name of the word list.
+ */
 const deleteWordListByName = async function (req, res, next) {
     const username = req.body.username;
     const wordListName = req.body.wordListName;

@@ -1,5 +1,10 @@
 let { User } = require('../models/user.model');
 
+/**
+ * Gets the user's current gamestate
+ * @param {String} username - name of the user 
+ * @returns a gamestate object
+ */
 const getUserGameState = async function (username) {
 
     try {
@@ -12,16 +17,25 @@ const getUserGameState = async function (username) {
         throw Error(`Error getting ${username} gamestate`);
     }
 }
-
+/**
+ * Updates the users current gamestate
+ * @param {String} username - name of the user 
+ * @param {Object} gamestate - object that details current gamestate. Includes secretWord, guessesRemaining, result, and pastGuesses 
+ */
 const updateUserGameState = async function (username, gamestate) {
     try {
         await User.updateOne({ username: username }, { gamestate: gamestate });
-        return true;
+        return;
     } catch (e) {
         throw Error(`Error updating ${username} gamestate`);
     }
 }
 
+/**
+ * Creates a user with the specified username and adds it to the database. 
+ * @param {String} username - name of the user 
+ * @returns 
+ */
 const addUser = async function (username) {
     try {
         const newUser = new User({ username });
@@ -31,6 +45,11 @@ const addUser = async function (username) {
     }
 }
 
+/**
+ * Gets the user from the database
+ * @param {String} username - name of the user 
+ * @returns User object
+ */
 const getUser = async function (username) {
     try {
         let filter = { username };

@@ -8,10 +8,10 @@ let CustomWordListService = require('../services/customWordList.service');
 /**
  * Used to start a new wordle game. 
  * Retrieves wordlist from database and randomly selects a word, storing initial gamestate in Users "gamestate" field in db
- * Request body can set numGuesses, default is 5
- * Request body can also set the username of the player, default is 'guest'
- * Request body can also contain a difficulty parameter which will select words based on assigned difficulty
- * Returns a message indicating game was started successfully, or an error message if an error occurred
+ * Request Parameters:
+ *  req.body.username - name of the user, default is 'guest'
+ *  req.body.numGuesses - Number of guesses user has to guess the secret word
+ *  req.body.difficulty - Difficulty of words to use from default word list. Can be 'easy', 'hard', or 'all', default is 'all'
  */
 const startGame = async function (req, res, next) {
     let difficulty = req.body.difficulty ? req.body.difficulty : 'all';
@@ -34,7 +34,9 @@ const startGame = async function (req, res, next) {
 
 /**
  * Used to make a guess in an existing wordle game. Game must be started before this can be called.
- * Request body must contain a guess and a username
+ * Request Parameters:
+ *  req.body.username - name of the user
+ *  req.body.guess - The user's guess
  */
 const makeGuess = async function (req, res, next) {
     const guess = req.body.guess;

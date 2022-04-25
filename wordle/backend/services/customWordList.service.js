@@ -4,7 +4,7 @@ const { User } = require('../models/user.model');
 /**
  * Gets all of the users word lists from database
  * @param {String} username 
- * @returns 
+ * @returns An array of all of the users word lists
  */
 const getAllWordLists = async function (username) {
 
@@ -18,6 +18,12 @@ const getAllWordLists = async function (username) {
     }
 }
 
+/**
+ * Creates a wordlist out of the specified words and adds that wordlist to the users array of word lista.
+ * @param {String} username - name of the user
+ * @param {String} wordListName  - name of the word list
+ * @param {[String]} words - array of words to be used in the word list
+ */
 const addWordList = async function (username, wordListName, words) {
     let wordLength = words[0].length;
     words.forEach(word => {
@@ -27,19 +33,24 @@ const addWordList = async function (username, wordListName, words) {
     const newWordList = { name: wordListName, words: words, wordLength: wordLength, enabled: false };
     try {
         let result = await User.updateOne({ username: username }, { $push: { wordLists: newWordList } });
-        return result.modifiedCount;
+        return;
     } catch (e) {
         throw Error(`Error adding ${username}'s Word List`);
     }
 }
 
+/**
+ * Removes the specified word list from the users array of word lists
+ * @param {String} username - name of the user
+ * @param {String} wordListName  - name of the word list
+ */
 const deleteWordListByName = async function (username, wordListName) {
     try {
         let result = await User.updateOne(
             { username: username },
             { $pull: { wordLists: { name: wordListName } } }
         );
-        return result.modifiedCount;
+        return;
     } catch (e) {
         throw Error(`Error deleting ${username}'s ${wordListName} Word List`);
     }
