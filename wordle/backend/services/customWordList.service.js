@@ -56,4 +56,28 @@ const deleteWordListByName = async function (username, wordListName) {
     }
 }
 
-module.exports = { getAllWordLists, addWordList, deleteWordListByName };
+const enableWordListByName = async function (username, wordListName) {
+    try {
+        await User.updateOne(
+            { username: username, "wordLists.name": wordListName },
+            { $set: { "wordLists.$.enabled": true } }
+        );
+        return;
+    } catch (e) {
+        throw Error(`Error enabling word list ${wordListName}`);
+    }
+}
+
+const disableWordListByName = async function (username, wordListName) {
+    try {
+        await User.updateOne(
+            { username: username, "wordLists.name": wordListName },
+            { $set: { "wordLists.$.enabled": false } }
+        );
+        return;
+    } catch (e) {
+        throw Error(`Error disabling word list ${wordListName}`);
+    }
+}
+
+module.exports = { getAllWordLists, addWordList, deleteWordListByName, enableWordListByName, disableWordListByName };

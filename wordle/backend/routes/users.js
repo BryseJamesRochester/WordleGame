@@ -9,6 +9,11 @@ router.post('/wordlist/add', UserController.addWordList);
 
 router.post('/wordlist/all', UserController.getAllWordLists);
 
-router.post('/wordlist/delete', UserController.deleteWordListByName);
+router.post('/wordlist/delete', UserController.deleteWordList);
+
+router.post('/wordlist/enable', UserController.enableWordList);
+
+router.post('/wordlist/disable', UserController.disableWordList);
+
 
 module.exports = router;

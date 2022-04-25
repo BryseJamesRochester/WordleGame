@@ -80,7 +80,7 @@ const getAllWordLists = async function (req, res, next) {
  *  req.body.username - name of the user adding the word list
  *  req.body.wordListName - name of the word list.
  */
-const deleteWordListByName = async function (req, res, next) {
+const deleteWordList = async function (req, res, next) {
     const username = req.body.username;
     const wordListName = req.body.wordListName;
 
@@ -92,4 +92,26 @@ const deleteWordListByName = async function (req, res, next) {
     }
 }
 
-module.exports = { addUser, getUser, addWordList, getAllWordLists, deleteWordListByName };
+const enableWordList = async function (req, res, next) {
+    const username = req.body.username;
+    const wordListName = req.body.wordListName;
+    try {
+        await CustomWordListService.enableWordListByName(username, wordListName);
+        return res.status(200).json(`Enabled word list ${wordListName}`);
+    } catch (e) {
+        return res.status(400).json({ status: 400, message: e.message });
+    }
+}
+
+const disableWordList = async function (req, res, next) {
+    const username = req.body.username;
+    const wordListName = req.body.wordListName;
+    try {
+        await CustomWordListService.disableWordListByName(username, wordListName);
+        return res.status(200).json(`Disabled word list ${wordListName}`);
+    } catch (e) {
+        return res.status(400).json({ status: 400, message: e.message });
+    }
+}
+
+module.exports = { addUser, getUser, addWordList, getAllWordLists, deleteWordList, enableWordList, disableWordList };

@@ -14,17 +14,17 @@ let CustomWordListService = require('../services/customWordList.service');
  *  req.body.difficulty - Difficulty of words to use from default word list. Can be 'easy', 'hard', or 'all', default is 'all'
  */
 const startGame = async function (req, res, next) {
-    let difficulty = req.body.difficulty ? req.body.difficulty : 'all';
-    let numGuesses = req.body.numGuesses ? req.body.numGuesses : 5;
-    let username = req.body.username ? req.body.username : 'guest';
+    const difficulty = req.body.difficulty ? req.body.difficulty : 'all';
+    const numGuesses = req.body.numGuesses ? req.body.numGuesses : 5;
+    const username = req.body.username ? req.body.username : 'guest';
     try {
-        let wordList = await DefaultWordListService.getDefaultWordList(difficulty);
+        const wordList = await DefaultWordListService.getDefaultWordList(difficulty);
 
-        let selectedWord = Math.floor(Math.random() * wordList.length);
-        let secretWord = wordList[selectedWord];
+        const selectedWord = Math.floor(Math.random() * wordList.length);
+        const secretWord = wordList[selectedWord];
 
         //gamestate of a new game
-        let gamestate = { secretWord: secretWord, remainingGuesses: numGuesses, result: "In Progress", pastGuesses: [] };
+        const gamestate = { secretWord: secretWord, remainingGuesses: numGuesses, result: "In Progress", pastGuesses: [] };
         if (UserService.updateUserGameState(username, gamestate))
             return res.status(200).json({ status: 200, message: `Game Started. Word is ${secretWord}` });
     } catch (e) {
@@ -42,8 +42,8 @@ const makeGuess = async function (req, res, next) {
     const guess = req.body.guess;
     const username = req.body.username;
     try {
-        let gamestate = await UserService.getUserGameState(username);
-        let newGamestate = GameService.checkGuess(gamestate, guess);
+        const gamestate = await UserService.getUserGameState(username);
+        const newGamestate = GameService.checkGuess(gamestate, guess);
         if (newGamestate.invalid) {
             return res.status(200).json({ status: 200, message: `Invalid guess. Guesses remaining: ${gamestate.remainingGuesses}` });
         } else {
