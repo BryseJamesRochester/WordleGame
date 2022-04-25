@@ -4,13 +4,12 @@ import "./App.css"
 
 import Keyboard from "./components/Keyboard.jsx"
 import "bootstrap/dist/css/bootstrap.min.css"
-
 import Grid from "./components/Grid.jsx"
 import { Container, Row, Col, Navbar, NavLink, Nav } from "react-bootstrap"
 import "bootstrap/dist/css/bootstrap.min.css"
 import Login from "./components/Login/Login"
 import useToken from "./useToken"
-import { boardDefault, wordAnswer } from "./components/Words"
+import { boardDefault, wordAnswer, checkGuess, guesses, checkGameState } from "./components/Words"
 
 
 export const AppContext = createContext()
@@ -27,7 +26,9 @@ function getToken() {
 
 function App() {
   const [board, setBoard] = useState(boardDefault)
-
+  const [currentGuesses, setGuesses] = useState(guesses)
+  const [gameOver, setGameOver] = useState(false) // true if game is over
+  const [gameWon, setGameWon] = useState(false)  // true if game is won
   const token = getToken()
 
   if (!token) {
@@ -48,7 +49,9 @@ function App() {
       </Navbar>
       <Container className="mw-50">
         <Col md={{ span: 6, offset: 3 }}>
-          <AppContext.Provider value={{ board, setBoard, wordAnswer }}>
+          <AppContext.Provider value={{ board, setBoard, wordAnswer, checkGuess, 
+            guesses, currentGuesses, setGuesses, gameOver, setGameOver, checkGameState,
+            gameWon, setGameWon}}>
             <Grid />
             <Keyboard />
           </AppContext.Provider>
