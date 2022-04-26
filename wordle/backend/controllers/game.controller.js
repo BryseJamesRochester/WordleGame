@@ -14,18 +14,28 @@ let CustomWordListService = require('../services/customWordList.service');
  *  req.body.difficulty - Difficulty of words to use from default word list. Can be 'easy', 'hard', or 'all', default is 'all'
  */
 const startGame = async function (req, res, next) {
+
+    const useDefaultWordList = req.body.useDefaultWordList==undefined ? true : req.body.useDefaultWordList;
     const difficulty = req.body.difficulty ? req.body.difficulty : 'all';
     const numGuesses = req.body.numGuesses ? req.body.numGuesses : 5;
     const username = req.body.username ? req.body.username : 'guest';
+
     try {
-        const wordList = await DefaultWordListService.getDefaultWordList(difficulty);
+        let wordList;
+        if(useDefaultWordList){
+            console.log(`using default. ${useDefaultWordList}`);
+            wordList = await DefaultWordListService.getDefaultWordList(difficulty);
+
+        }
+        else
+            wordList = await CustomWordListService.createWordList(username); 
 
         const selectedWord = Math.floor(Math.random() * wordList.length);
         const secretWord = wordList[selectedWord];
 
         //gamestate of a new game
         const gamestate = { secretWord: secretWord, remainingGuesses: numGuesses, result: "In Progress", pastGuesses: [] };
-        if (UserService.updateUserGameState(username, gamestate))
+        UserService.updateUserGameState(username, gamestate)
             return res.status(200).json({ status: 200, message: `Game Started. Word is ${secretWord}` });
     } catch (e) {
         return res.status(400).json({ status: 400, message: e.message });

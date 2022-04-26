@@ -1,6 +1,23 @@
 const { User } = require('../models/user.model');
 
 
+const createWordList = async function (username) {
+
+    try {
+        const allWordLists = await getAllWordLists(username);
+        let wordList = [];
+        allWordLists.forEach(doc => {
+            if (doc.enabled)
+                wordList = wordList.concat(doc.words);
+        });
+        if (wordList.length < 1)
+            throw Error('No enabled Word Lists');
+        return wordList;
+    } catch (e) {
+        throw Error(`Error creating custom word list: ${e.message}`);
+    }
+}
+
 /**
  * Gets all of the users word lists from database
  * @param {String} username 
@@ -9,9 +26,9 @@ const { User } = require('../models/user.model');
 const getAllWordLists = async function (username) {
 
     try {
-        let filter = { username: username };
-        let projection = 'wordLists -_id';
-        let wordListsDoc = await User.findOne(filter).select(projection).exec();
+        const filter = { username: username };
+        const projection = 'wordLists -_id';
+        const wordListsDoc = await User.findOne(filter).select(projection).exec();
         return wordListsDoc.wordLists;
     } catch (e) {
         throw Error(`Error getting ${username}'s Word Lists`);
@@ -25,14 +42,14 @@ const getAllWordLists = async function (username) {
  * @param {[String]} words - array of words to be used in the word list
  */
 const addWordList = async function (username, wordListName, words) {
-    let wordLength = words[0].length;
+    const wordLength = words[0].length;
     words.forEach(word => {
         if (word.length != wordLength)
             throw Error('Words are not the same length');
     });
     const newWordList = { name: wordListName, words: words, wordLength: wordLength, enabled: false };
     try {
-        let result = await User.updateOne({ username: username }, { $push: { wordLists: newWordList } });
+        const result = await User.updateOne({ username: username }, { $push: { wordLists: newWordList } });
         return;
     } catch (e) {
         throw Error(`Error adding ${username}'s Word List`);
@@ -46,7 +63,7 @@ const addWordList = async function (username, wordListName, words) {
  */
 const deleteWordListByName = async function (username, wordListName) {
     try {
-        let result = await User.updateOne(
+        const result = await User.updateOne(
             { username: username },
             { $pull: { wordLists: { name: wordListName } } }
         );
@@ -80,4 +97,4 @@ const disableWordListByName = async function (username, wordListName) {
     }
 }
 
-module.exports = { getAllWordLists, addWordList, deleteWordListByName, enableWordListByName, disableWordListByName };
+module.exports = { getAllWordLists, addWordList, deleteWordListByName, enableWordListByName, disableWordListByName, createWordList };
