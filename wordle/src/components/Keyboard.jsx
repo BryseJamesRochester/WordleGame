@@ -15,12 +15,10 @@ var gameOverMsg = "Game over, out of guesses";
 
 function updateBoard(input, context){
   if(context.gameWon && context.gameOver){
-    alert(gameWonMsg);
     return;
   }
   if(!context.gameWon && context.gameOver){
-    alert(gameOverMsg);
-    return;
+        return;
   }
   if(y >= 5)
     return;
@@ -34,11 +32,9 @@ function updateBoard(input, context){
 
 function handleEnter(context){
   if(context.gameWon && context.gameOver){
-    alert(gameWonMsg);
     return;
   }
   if(!context.gameWon && context.gameOver){
-    alert(gameOverMsg);
     return;
   }
   var input = context.board[x].join("");
@@ -50,6 +46,7 @@ function handleEnter(context){
     
     y = 0;
     context.setGuesses(context.checkGuess(x));
+    updateKeyboard(context);
     context.setGameWon(checkGameState(x,context));
     if(x === 5)
       context.setGameOver(true);
@@ -58,14 +55,30 @@ function handleEnter(context){
    
 }
 
+function updateKeyboard(context){
+  var attempts = [...context.board];
+  var guess = [...context.guesses];
+  for (let i = 0; i < attempts[x].length; i++){
+    var keyID = "key_" + attempts[x][i].toLowerCase();
+      if(guess[x][i] === "0"){
+        document.getElementById(keyID).className = grey;
+      }
+      else if(guess[x][i] === "1"){
+        document.getElementById(keyID).className = yellow;
+      }
+      else if(guess[x][i] === "2"){
+        document.getElementById(keyID).className = green;
+
+      }
+  }
+}
+
 function handleBackspace(context){
   if(context.gameWon && context.gameOver){
-    alert(gameWonMsg);
     return;
   }
   if(!context.gameWon && context.gameOver){
-    alert(gameOverMsg);
-    return;
+        return;
   }
   if(y > 0)
     y = y - 1;
