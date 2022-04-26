@@ -92,6 +92,12 @@ const deleteWordList = async function (req, res, next) {
     }
 }
 
+/**
+ * Attempts to enable the specified word list from the user's array of custom word lists.
+ * Request Parameters:
+ *  req.body.username - name of the user adding the word list
+ *  req.body.wordListName - name of the word list.
+ */
 const enableWordList = async function (req, res, next) {
     const username = req.body.username;
     const wordListName = req.body.wordListName;
@@ -103,6 +109,12 @@ const enableWordList = async function (req, res, next) {
     }
 }
 
+/**
+ * Disables the specified word list in the user's array of custom word lists.
+ * Request Parameters:
+ *  req.body.username - name of the user adding the word list
+ *  req.body.wordListName - name of the word list.
+ */
 const disableWordList = async function (req, res, next) {
     const username = req.body.username;
     const wordListName = req.body.wordListName;

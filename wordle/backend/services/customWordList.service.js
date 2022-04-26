@@ -1,6 +1,10 @@
 const { User } = require('../models/user.model');
 
-
+/**
+ * Creates the custom word list to use for a game. Combines all enabled word lists into one array.
+ * @param {String} username - name of the user
+ * @returns an array combining all enabled word lists
+ */
 const createWordList = async function (username) {
 
     try {
@@ -20,7 +24,7 @@ const createWordList = async function (username) {
 
 /**
  * Gets all of the users word lists from database
- * @param {String} username 
+ * @param {String} username - name of the user
  * @returns An array of all of the users word lists
  */
 const getAllWordLists = async function (username) {
@@ -73,6 +77,11 @@ const deleteWordListByName = async function (username, wordListName) {
     }
 }
 
+/**
+ * Enables the specified word list. Checks to ensure that every enabled word list has the same word length.
+ * @param {String} username - name of the user
+ * @param {String} wordListName  - name of the word list
+ */
 const enableWordListByName = async function (username, wordListName) {
     try {
         const allWordLists = await getAllWordLists(username);
@@ -102,6 +111,12 @@ const enableWordListByName = async function (username, wordListName) {
     }
 }
 
+
+/**
+ * Disables the specified word list.
+ * @param {String} username - name of the user
+ * @param {String} wordListName  - name of the word list
+ */
 const disableWordListByName = async function (username, wordListName) {
     try {
         await User.updateOne(
