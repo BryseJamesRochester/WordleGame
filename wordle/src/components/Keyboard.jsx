@@ -1,7 +1,7 @@
 import React, {useContext} from 'react'
 import Button from 'react-bootstrap/Button'
 import { Container, Row, Col } from 'react-bootstrap'
-import { AppContext } from "../App"
+import { AppContext } from "./Game"
 
 var guesses = ["","","","",""];
 var currInput = "";

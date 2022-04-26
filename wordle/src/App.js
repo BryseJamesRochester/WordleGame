@@ -15,7 +15,6 @@ import {
   Nav,
   Button,
 } from "react-bootstrap"
-import "bootstrap/dist/css/bootstrap.min.css"
 import Login from "./components/Login/Login"
 import useToken from "./useToken"
 import {
@@ -28,8 +27,9 @@ import {
 } from "./components/Words"
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom"
 import Profile from "./components/Profile"
-
-export const AppContext = createContext()
+import Game from "./components/Game"
+import Home from "./components/Home"
+// export const AppContext = createContext()
 const currentRow = 0
 const currentIndex = 0
 
@@ -47,16 +47,6 @@ function setBoard(boardChanges) {
 }
 
 function App() {
-  const [boardCurrent, setBoard] = useState(boardDefault)
-
-  function updateBoard1() {
-    setBoard((boardCurrent) => boardTest1)
-    console.log(boardCurrent)
-  }
-  function updateBoard2() {
-    setBoard((boardCurrent) => boardTest2)
-    console.log(boardCurrent)
-  }
 
   const token = getToken()
 
@@ -70,29 +60,28 @@ function App() {
         <Navbar variant="dark" bg="dark">
           <Container>
             <Col>
-              <Navbar.Brand href="#">Wordle</Navbar.Brand>
+              <Navbar.Brand href="/">Wordle</Navbar.Brand>
+            </Col>
+
+            <Col md={{ span: 2 }}>
+              <Nav.Link href="/game">Single Player</Nav.Link>
+            </Col>
+            <Col md={{ span: 1 }}>
+              <Nav.Link href="">Duel</Nav.Link>
             </Col>
             <Col md={{ span: 1 }}>
               <Nav.Link href="/profile">Profile</Nav.Link>
             </Col>
             <Col md={{ span: 1 }}>
-              <Nav.Link href="#login">Login</Nav.Link>
+              <Nav.Link href="/login">Login</Nav.Link>
             </Col>
           </Container>
         </Navbar>
-        <Container className="mw-50">
-          <Col md={{ span: 6, offset: 3 }}>
-            <AppContext.Provider value={{ setBoard, wordAnswer, boardCurrent }}>
-              <Grid />
-              <Keyboard />
-              <button onClick={updateBoard1}>test 1</button>
-              <button onClick={updateBoard2}>test 2</button>
-            </AppContext.Provider>
-          </Col>
-        </Container>
       </div>
       <Routes>
-        <Route path="/profile" element={<Profile/>}/>
+        <Route path="/game" element={<Game />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/" element={<Home />} />
       </Routes>
     </Router>
   )
