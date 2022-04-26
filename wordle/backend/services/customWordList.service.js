@@ -75,13 +75,30 @@ const deleteWordListByName = async function (username, wordListName) {
 
 const enableWordListByName = async function (username, wordListName) {
     try {
+        const allWordLists = await getAllWordLists(username);
+        let wordLength = 0;
+        let listToEnable = undefined;
+        allWordLists.forEach(list => {
+            if(list.enabled){
+                if(wordLength==0)
+                    wordLength = list.wordLength;
+                else
+                    if (wordLength!=list.wordLength)
+                        list.enabled = false;
+            }
+            if (list.name == wordListName) {
+                listToEnable = list;
+            }
+        });
+        if(listToEnable==undefined) throw Error(`List ${wordListName} does not exist`);
+        if (wordLength != 0 && wordLength != listToEnable.wordLength) throw Error(`List ${wordListName} is not same length as other enabled lists`);
         await User.updateOne(
             { username: username, "wordLists.name": wordListName },
             { $set: { "wordLists.$.enabled": true } }
         );
         return;
     } catch (e) {
-        throw Error(`Error enabling word list ${wordListName}`);
+        throw Error(`Error enabling word list ${wordListName}: ${e.message}`);
     }
 }
 
