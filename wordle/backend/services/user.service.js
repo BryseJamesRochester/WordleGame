@@ -1,46 +1,65 @@
-let User = require('../models/user.model');
+let { User } = require('../models/user.model');
 
-const getUserGameState = async function(username){
-    
+/**
+ * Gets the user's current gamestate
+ * @param {String} username - name of the user 
+ * @returns a gamestate object
+ */
+const getUserGameState = async function (username) {
+
     try {
-        let filter = {username};
+        let filter = { username };
         let projection = 'gamestate -_id';
         let doc = await User.findOne(filter).select(projection).exec();
         gamestate = doc.gamestate;
         return gamestate;
-    } catch(e) {
+    } catch (e) {
         throw Error(`Error getting ${username} gamestate`);
     }
 }
-
-const updateUserGameState = async function(username, gamestate) {
+/**
+ * Updates the users current gamestate
+ * @param {String} username - name of the user 
+ * @param {Object} gamestate - object that details current gamestate. Includes secretWord, guessesRemaining, result, and pastGuesses 
+ */
+const updateUserGameState = async function (username, gamestate) {
     try {
-        await User.updateOne({username:username},{gamestate:gamestate});
-        return true;
+        await User.updateOne({ username: username }, { gamestate: gamestate });
+        return;
     } catch (e) {
         throw Error(`Error updating ${username} gamestate`);
     }
 }
 
-const addUser = async function(username) {
+/**
+ * Creates a user with the specified username and adds it to the database. 
+ * @param {String} username - name of the user 
+ * @returns 
+ */
+const addUser = async function (username) {
     try {
-        const newUser = new User({username});
-        await newUser.save()
-    } catch(e) {
-        throw Error(`Error adding user`)
-    }   
+        const newUser = new User({ username });
+        return await newUser.save();
+    } catch (e) {
+        throw Error(`Error adding user. Meesage: ${e.message}`);
+    }
 }
 
-const getUser = async function(username) {
+/**
+ * Gets the user from the database
+ * @param {String} username - name of the user 
+ * @returns User object
+ */
+const getUser = async function (username) {
     try {
-        let filter = {username};
+        let filter = { username };
         let doc = await User.findOne(filter).exec();
         return doc;
-    } catch(e) {
+    } catch (e) {
         throw Error(`Error getting user ${username}`);
     }
 }
 
 
 
-module.exports = {getUserGameState, updateUserGameState, addUser, getUser};
+module.exports = { getUserGameState, updateUserGameState, addUser, getUser };
