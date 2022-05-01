@@ -1,18 +1,26 @@
 //const User = require('../models/user.model');
 const UserService = require('../services/user.service');
-const CustomWordListService = require('../services/customWordList.service')
+const CustomWordlistService = require('../services/customWordlist.service')
 
 
 /**
  * Adds a user to the database.
  * Request Parameters:
  *  req.params.username - name of the user
+ *  req.body.password - the user's password
+ *  req.body.email - a valid email address
  */
 const addUser = async function (req, res, next) {
-    try {
-        const username = req.params.username;
+    const username = req.params.username;
+    const password = req.body.password;
+    const email = req.body.email;
 
-        await UserService.addUser(username);
+    try {
+        if (username == undefined) throw Error('Username not defined');
+        if (password == undefined) throw Error('Password not defined');
+        if (email == undefined) throw Error('Email not defined');
+        let pwHash = {hash:"fake password", salt:"fake salt"};//hash and salt pw
+        await UserService.addUser(username, pwHash, email);
         return res.status(200).json('User added');
 
     } catch (e) {
@@ -20,8 +28,16 @@ const addUser = async function (req, res, next) {
     }
 }
 
-const getProfilePageInfo = async function(req, res, next) {
-    res.send("not yet implemented");
+const getProfilePageInfo = async function (req, res, next) {
+    const username = req.params.username;
+
+    try {
+        const user = await UserService.getUser(username);
+        const profileInfo = {username:username, email:user.email, stats:user.stats, wordlists:user.wordlists};
+        return res.status(200).json(profileInfo);
+    } catch (e) {
+        return res.status(400).json({ status: 400, message: e.message });
+    }
 }
 
 /**
@@ -46,15 +62,15 @@ const getUser = async function (req, res, next) {
  * Adds a word list to the specified users array of custom word lists.
  * Request Parameters:
  *  req.params.username - name of the user adding the word list
- *  req.body.wordListName - name of the word list.
- *  req.body.wordList - array of words to be included in the word list. Words must all be the same length.
+ *  req.body.wordlistName - name of the word list.
+ *  req.body.wordlist - array of words to be included in the word list. Words must all be the same length.
  */
-const addWordList = async function (req, res, next) {
+const addWordlist = async function (req, res, next) {
     const username = req.params.username;
-    const wordListName = req.body.wordListName;
-    const wordList = req.body.wordList;
+    const wordlistName = req.body.wordlistName;
+    const wordlist = req.body.wordlist;
     try {
-        await CustomWordListService.addWordList(username, wordListName, wordList);
+        await CustomWordlistService.addWordlist(username, wordlistName, wordlist);
         return res.status(200).json('Wordlist added');
 
     } catch (e) {
@@ -67,11 +83,11 @@ const addWordList = async function (req, res, next) {
  * Request Parameters:
  *  req.params.username - name of the user
  */
-const getAllWordLists = async function (req, res, next) {
+const getAllWordlists = async function (req, res, next) {
     const username = req.params.username;
 
     try {
-        let wordlists = await CustomWordListService.getAllWordLists(username)
+        let wordlists = await CustomWordlistService.getAllWordlists(username)
         return res.status(200).json(wordlists);
     } catch (e) {
         return res.status(400).json({ status: 400, message: e.message });
@@ -82,40 +98,40 @@ const getAllWordLists = async function (req, res, next) {
  * Deletes the word list from the user's array of custom word lists.
  * Request Parameters:
  *  req.params.username - name of the user adding the word list
- *  req.body.wordListName - name of the word list.
+ *  req.body.wordlistName - name of the word list.
  */
-const deleteWordList = async function (req, res, next) {
+const deleteWordlist = async function (req, res, next) {
     const username = req.params.username;
-    const wordListName = req.body.wordListName;
+    const wordlistName = req.body.wordlistName;
 
     try {
-        await CustomWordListService.deleteWordListByName(username, wordListName);
+        await CustomWordlistService.deleteWordlistByName(username, wordlistName);
         return res.status(200).json(`Deleted word list`);
     } catch (e) {
         return res.status(400).json({ status: 400, message: e.message });
     }
 }
 
-const enableWordList = async function (req, res, next) {
+const enableWordlist = async function (req, res, next) {
     const username = req.params.username;
-    const wordListName = req.body.wordListName;
+    const wordlistName = req.body.wordlistName;
     try {
-        await CustomWordListService.enableWordListByName(username, wordListName);
-        return res.status(200).json(`Enabled word list ${wordListName}`);
+        await CustomWordlistService.enableWordlistByName(username, wordlistName);
+        return res.status(200).json(`Enabled word list ${wordlistName}`);
     } catch (e) {
         return res.status(400).json({ status: 400, message: e.message });
     }
 }
 
-const disableWordList = async function (req, res, next) {
+const disableWordlist = async function (req, res, next) {
     const username = req.params.username;
-    const wordListName = req.body.wordListName;
+    const wordlistName = req.body.wordlistName;
     try {
-        await CustomWordListService.disableWordListByName(username, wordListName);
-        return res.status(200).json(`Disabled word list ${wordListName}`);
+        await CustomWordlistService.disableWordlistByName(username, wordlistName);
+        return res.status(200).json(`Disabled word list ${wordlistName}`);
     } catch (e) {
         return res.status(400).json({ status: 400, message: e.message });
     }
 }
 
-module.exports = { addUser, getUser, addWordList, getAllWordLists, deleteWordList, enableWordList, disableWordList, getProfilePageInfo };
+module.exports = { addUser, getUser, addWordlist, getAllWordlists, deleteWordlist, enableWordlist, disableWordlist, getProfilePageInfo };

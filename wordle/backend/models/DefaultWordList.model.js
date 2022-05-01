@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const defaultWordListSchema = new Schema({
+const defaultWordlistSchema = new Schema({
     word: {
         type: String,
         required: true,
@@ -17,5 +17,5 @@ const defaultWordListSchema = new Schema({
     collection: 'dictionary'
 });
 
-const DefaultWordList = mongoose.model('DefaultWordList', defaultWordListSchema);
-module.exports = DefaultWordList;
+const DefaultWordlist = mongoose.model('DefaultWordlist', defaultWordlistSchema);
+module.exports = DefaultWordlist;

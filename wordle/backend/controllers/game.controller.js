@@ -1,8 +1,8 @@
 
 let UserService = require('../services/user.service');
 let GameService = require('../services/game.service');
-let DefaultWordListService = require('../services/defaultWordList.service');
-let CustomWordListService = require('../services/customWordList.service');
+let DefaultWordlistService = require('../services/defaultWordlist.service');
+let CustomWordlistService = require('../services/customWordlist.service');
 
 
 /**
@@ -10,28 +10,26 @@ let CustomWordListService = require('../services/customWordList.service');
  * Retrieves wordlist from database and randomly selects a word, storing initial gamestate in Users "gamestate" field in db
  * Request Parameters:
  *  req.body.username - name of the user, default is 'guest'
- *  req.body.numGuesses - Number of guesses user has to guess the secret word
+ *  req.body.numGuesses - Number of guesses user has to guess the secret word, default is 6
  *  req.body.difficulty - Difficulty of words to use from default word list. Can be 'easy', 'hard', or 'all', default is 'all'
  */
 const startGame = async function (req, res, next) {
 
-    const useDefaultWordList = req.body.useDefaultWordList==undefined ? true : req.body.useDefaultWordList;
+    const useDefaultWordlist = req.body.useDefaultWordlist==undefined ? true : req.body.useDefaultWordlist;
     const difficulty = req.body.difficulty ? req.body.difficulty : 'all';
-    const numGuesses = req.body.numGuesses ? req.body.numGuesses : 5;
+    const numGuesses = req.body.numGuesses ? req.body.numGuesses : 6;
     const username = req.params.username ? req.params.username : 'guest';
 
     try {
-        let wordList;
-        if(useDefaultWordList){
-            console.log(`using default. ${useDefaultWordList}`);
-            wordList = await DefaultWordListService.getDefaultWordList(difficulty);
-
+        let wordlist;
+        if(useDefaultWordlist){
+            wordlist = await DefaultWordlistService.getDefaultWordlist(difficulty);
         }
         else
-            wordList = await CustomWordListService.createWordList(username); 
+            wordlist = await CustomWordlistService.createWordlist(username); 
 
-        const selectedWord = Math.floor(Math.random() * wordList.length);
-        const secretWord = wordList[selectedWord];
+        const selectedWord = Math.floor(Math.random() * wordlist.length);
+        const secretWord = wordlist[selectedWord];
 
         //gamestate of a new game
         const gamestate = { secretWord: secretWord, remainingGuesses: numGuesses, result: "In Progress", pastGuesses: [] };
@@ -50,7 +48,7 @@ const startGame = async function (req, res, next) {
  */
 const makeGuess = async function (req, res, next) {
     const guess = req.body.guess;
-    const username = req.body.username;
+    const username = req.params.username;
     try {
         const gamestate = await UserService.getUserGameState(username);
         const newGamestate = GameService.checkGuess(gamestate, guess);

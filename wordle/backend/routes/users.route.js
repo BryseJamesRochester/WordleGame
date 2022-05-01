@@ -4,21 +4,21 @@ let AuthenticationController = require('../controllers/authentication.controller
 
 //router.get('/:username', UserController.getUser);
 
-router.post('/add', UserController.addUser);
+router.post('/:username/add', UserController.addUser);
 
 router.post('/:username/login', AuthenticationController.login);
 
 router.get('/:username/profile', UserController.getProfilePageInfo);
 
-router.get('/:username/wordlist/all', UserController.getAllWordLists);
+router.get('/:username/wordlist/all', UserController.getAllWordlists);
 
-router.post('/:username/wordlist/add', UserController.addWordList);
+router.post('/:username/wordlist/add', UserController.addWordlist);
 
-router.delete('/:username/wordlist/delete', UserController.deleteWordList);
+router.delete('/:username/wordlist/delete', UserController.deleteWordlist);
 
-router.put('/:username/wordlist/enable', UserController.enableWordList);
+router.put('/:username/wordlist/enable', UserController.enableWordlist);
 
-//router.post('/:username/wordlist/disable', UserController.disableWordList);
+//router.post('/:username/wordlist/disable', UserController.disableWordlist);
 
 
 module.exports = router;

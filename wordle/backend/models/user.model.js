@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 //const pastGuessSchema = Schema({ guess: String, matches: [Number] }, { _id: false });
 //const gamestateSchema = Schema({ secretWord: String, remainingGuesses: Number, result: String, pastGuesses: [String] }, { _id: false });
 
-
+//username, password, email, stats, gamestate, wordlists
 const userSchema = new Schema({
     username: {
         type: String,
@@ -23,11 +23,19 @@ const userSchema = new Schema({
             required: true
         }
     },
+    email: {
+        type:String,
+        required:true,
+        unique:true,
+        trim:true,
+        lowercase:true,
+        match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
+    },
     stats: {
-        gamesPlayed: Number,
-        gamesWon: Number,
-        multiplayerGamesPlayed: Number,
-        multiplayerGamesWon: Number
+        gamesPlayed: {type:Number, default:0},
+        gamesWon: {type:Number, default:0},
+        multiplayerGamesPlayed: {type:Number, default:0},
+        multiplayerGamesWon: {type:Number, default:0}
     },
     gamestate: { 
         secretWord: String, 
@@ -35,7 +43,7 @@ const userSchema = new Schema({
         result: String, 
         pastGuesses: [String] 
     },
-    wordLists: [{
+    wordlists: [{
         name: { type: String, unique: true },
         words: [String],
         wordLength: Number,
