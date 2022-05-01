@@ -30,10 +30,8 @@ connection.once('open', () => {
 });
 
 const usersRouter = require('./routes/users');
-const wordleWordRouter = require('./routes/worldeWord');
 const gameRouter = require('./routes/game');
 
-app.use('/words', wordleWordRouter);
 app.use('/users', usersRouter);
 app.use('/game', gameRouter);
 
