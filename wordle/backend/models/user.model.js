@@ -44,7 +44,7 @@ const userSchema = new Schema({
         pastGuesses: [String] 
     },
     wordlists: [{
-        name: { type: String, unique: true },
+        name:String,
         words: [String],
         wordLength: Number,
         enabled: Boolean
