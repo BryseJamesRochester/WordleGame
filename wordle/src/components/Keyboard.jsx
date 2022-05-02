@@ -1,6 +1,7 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import Button from 'react-bootstrap/Button'
 import { Container, Row, Col } from 'react-bootstrap'
+import { AppContext } from "./Game"
 
 var guesses = ["","","","",""];
 var currInput = "";
@@ -132,15 +133,16 @@ document.removeEventListener('keydown', (event) => {
 }
 })
 
-function handleClick(){
-  // if(inputString.length > 5){
-  //   inputString += document.getElementById(keyId).text;
-  //   console.log(inputString);
-  // }
-  console.log("clicked");
-}
 
 function Keyboard() {
+  const { board } = useContext(AppContext)
+  function updateBoard(x, y, input){
+    const currBoard = [...board];
+    currBoard[x][y] = input;
+    board = currBoard;
+}
+
+
   return (
     <div>
       <Container>

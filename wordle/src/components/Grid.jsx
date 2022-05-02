@@ -1,45 +1,47 @@
-import React from "react"
+import React, { useContext } from "react"
+import { AppContext } from "./Game"
 import { Container, Row, Col } from "react-bootstrap"
 import Square from "./Square"
 
 function Grid() {
+  const { board, boardCurrent } = useContext(AppContext)
   return (
     <div>
       <Container className="gridBox d-flex justify-content-center flex-nowrap">
         <Col>
-            <Square letter="B" guess="2"/>
-            <Square letter="" guess=""/>
-            <Square letter="" guess=""/>
-            <Square letter="" guess=""/>
-            <Square letter="" guess=""/>
+          <Square row="0" col="0"/>
+          <Square row="0" col="1"/>
+          <Square row="0" col="2"/>
+          <Square row="0" col="3"/>
+          <Square row="0" col="4"/>
         </Col>
         <Col>
-            <Square letter="B" guess="2"/>
-            <Square letter="" guess=""/>
-            <Square letter="" guess=""/>
-            <Square letter="" guess=""/>
-            <Square letter="" guess=""/>
+          <Square row="1" col="0"/>
+          <Square row="1" col="1"/>
+          <Square row="1" col="2"/>
+          <Square row="1" col="3"/>
+          <Square row="1" col="4"/>
         </Col>
         <Col>
-            <Square letter="B" guess="2"/>
-            <Square letter="" guess=""/>
-            <Square letter="" guess=""/>
-            <Square letter="" guess=""/>
-            <Square letter="" guess=""/>
+          <Square row="2" col="0"/>
+          <Square row="2" col="1"/>
+          <Square row="2" col="2"/>
+          <Square row="2" col="3"/>
+          <Square row="2" col="4"/>
         </Col>
         <Col>
-            <Square letter="B" guess="2"/>
-            <Square letter="" guess=""/>
-            <Square letter="" guess=""/>
-            <Square letter="" guess=""/>
-            <Square letter="" guess=""/>
+          <Square row="3" col="0"/>
+          <Square row="3" col="1"/>
+          <Square row="3" col="2"/>
+          <Square row="3" col="3"/>
+          <Square row="3" col="4"/>
         </Col>
         <Col>
-            <Square letter="B" guess="2"/>
-            <Square letter="" guess=""/>
-            <Square letter="" guess=""/>
-            <Square letter="" guess=""/>
-            <Square letter="" guess=""/>
+          <Square row="4" col="0"/>
+          <Square row="4" col="1"/>
+          <Square row="4" col="2"/>
+          <Square row="4" col="3"/>
+          <Square row="4" col="4"/>
         </Col>
       </Container>
     </div>
