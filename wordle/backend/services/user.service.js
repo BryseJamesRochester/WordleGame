@@ -32,16 +32,16 @@ const updateUserGameState = async function (username, gamestate) {
 }
 
 /**
- * Creates a user with the specified username and adds it to the database. 
+ * Creates a user with the specified username, password, and email and adds it to the database. 
  * @param {String} username - name of the user 
  * @returns 
  */
-const addUser = async function (username) {
+const addUser = async function (username, password, email) {
     try {
-        const newUser = new User({ username });
+        const newUser = new User({ username:username, password:password, email:email });
         return await newUser.save();
     } catch (e) {
-        throw Error(`Error adding user. Meesage: ${e.message}`);
+        throw Error(`Error adding user. Message: ${e.message}`);
     }
 }
 
