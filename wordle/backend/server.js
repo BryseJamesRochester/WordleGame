@@ -29,10 +29,12 @@ connection.once('open', () => {
     console.log("database connection successful");
 });
 
-const usersRouter = require('./routes/users');
-const gameRouter = require('./routes/game');
+const usersRouter = require('./routes/users.route');
+const guestRouter = require('./routes/guest.route');
+const gameRouter = require('./routes/game.route');
 
 app.use('/users', usersRouter);
+app.use('/guest', guestRouter);
 app.use('/game', gameRouter);
 
 app.listen(port, () => {

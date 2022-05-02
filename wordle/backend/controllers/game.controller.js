@@ -18,7 +18,7 @@ const startGame = async function (req, res, next) {
     const useDefaultWordList = req.body.useDefaultWordList==undefined ? true : req.body.useDefaultWordList;
     const difficulty = req.body.difficulty ? req.body.difficulty : 'all';
     const numGuesses = req.body.numGuesses ? req.body.numGuesses : 5;
-    const username = req.body.username ? req.body.username : 'guest';
+    const username = req.params.username ? req.params.username : 'guest';
 
     try {
         let wordList;
