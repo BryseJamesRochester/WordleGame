@@ -14,14 +14,8 @@ const userSchema = new Schema({
         minLength: 4
     },
     password: {
-        hash: {
-            type: String,
-            required: true
-        },
-        salt: {
-            type: String,
-            required: true
-        }
+        type: String,
+        required: true
     },
     email: {
         type:String,
