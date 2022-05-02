@@ -1,6 +1,7 @@
 //const User = require('../models/user.model');
 const UserService = require('../services/user.service');
-const CustomWordlistService = require('../services/customWordlist.service')
+const CustomWordlistService = require('../services/customWordlist.service');
+const EncryptionService = require('../services/encryption.service');
 
 
 /**
@@ -19,7 +20,7 @@ const addUser = async function (req, res, next) {
         if (username == undefined) throw Error('Username not defined');
         if (password == undefined) throw Error('Password not defined');
         if (email == undefined) throw Error('Email not defined');
-        let pwHash = {hash:"fake password", salt:"fake salt"};//hash and salt pw
+        let pwHash = await EncryptionService.hashPassword(password);//hash and salt pw
         await UserService.addUser(username, pwHash, email);
         return res.status(200).json('User added');
 
