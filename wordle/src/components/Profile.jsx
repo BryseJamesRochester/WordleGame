@@ -11,8 +11,6 @@ function Profile() {
   function setUser1() {
     setUsername((username) => "brandon")
 
-
-
   }
   function setUser2() {
     setUsername((username) => "test")
