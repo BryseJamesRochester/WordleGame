@@ -118,9 +118,7 @@ const enableWordlists = async function (req, res, next) {
     const wordlistNames = req.body.wordlistNames;
     try {
         const wordlists = await CustomWordlistService.getAllWordlists(username);
-        console.log(`${wordlists}`);
         const allNames = wordlists.map(list => {return list.name});
-        console.log(`${wordlistNames}`);
         allNames.forEach(name => {
             if (wordlistNames.includes(name))
                 CustomWordlistService.enableWordlistByName(username, name);
