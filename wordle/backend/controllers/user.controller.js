@@ -119,10 +119,11 @@ const enableWordlists = async function (req, res, next) {
     try {
         const wordlists = await CustomWordlistService.getAllWordlists(username);
         const allNames = wordlists.map(list => {return list.name});
+        const enabledLists = wordlists.map(list => {if(list.enabled) return list.name});
         allNames.forEach(name => {
-            if (wordlistNames.includes(name))
+            if (wordlistNames.includes(name)&&!enabledLists.includes(name))
                 CustomWordlistService.enableWordlistByName(username, name);
-            else
+            else if (!wordlistNames.includes(name) && enabledLists.includes(name))
                 CustomWordlistService.disableWordlistByName(username, name)
         });
         return res.status(200).json(`Enabled word lists`);
