@@ -16,7 +16,7 @@ router.post('/:username/wordlist/add', UserController.addWordlist);
 
 router.delete('/:username/wordlist/delete', UserController.deleteWordlist);
 
-router.put('/:username/wordlist/enable', UserController.enableWordlist);
+router.put('/:username/wordlist/enable', UserController.enableWordlists);
 
 //router.post('/:username/wordlist/disable', UserController.disableWordlist);
 
