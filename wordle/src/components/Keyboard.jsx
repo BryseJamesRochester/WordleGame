@@ -10,6 +10,7 @@ var y = 0;
 var yellow = "btn btn-warning";
 var green = "btn btn-success";
 var grey = "btn btn-secondary";
+var defaultColor = "btn btn-outline-dark";
 var gameWonMsg = "Congrats, you won!";
 var gameOverMsg = "Game over, out of guesses";
 
@@ -60,10 +61,11 @@ function updateKeyboard(context){
   var guess = [...context.guesses];
   for (let i = 0; i < attempts[x].length; i++){
     var keyID = "key_" + attempts[x][i].toLowerCase();
+    console.log(document.getElementById(keyID).className)
       if(guess[x][i] === "0"){
         document.getElementById(keyID).className = grey;
       }
-      else if(guess[x][i] === "1"){
+      else if(guess[x][i] === "1" ){
         document.getElementById(keyID).className = yellow;
       }
       else if(guess[x][i] === "2"){
