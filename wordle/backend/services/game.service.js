@@ -27,9 +27,9 @@ const checkGuess = function(gamestate, guess){
     else if (gamestate.remainingGuesses < 1)
         gamestate.result = 'lose';
 
-    gamestate.pastGuesses.push({guess:guess, matches:matches});
+    gamestate.pastGuesses.push(guess);
 
-    return gamestate;
+    return {gamestate, matches};
 }
 
 /**
