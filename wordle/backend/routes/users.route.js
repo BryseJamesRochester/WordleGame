@@ -10,6 +10,8 @@ router.post('/:username/login', AuthenticationController.login);
 
 router.get('/:username/profile', UserController.getProfilePageInfo);
 
+router.get('/:username/gamestate', UserController.getUserGameState);
+
 router.get('/:username/wordlist/all', UserController.getAllWordlists);
 
 router.post('/:username/wordlist/add', UserController.addWordlist);

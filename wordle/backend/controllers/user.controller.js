@@ -2,6 +2,7 @@
 const UserService = require('../services/user.service');
 const CustomWordlistService = require('../services/customWordlist.service');
 const EncryptionService = require('../services/encryption.service');
+const { User } = require('../models/user.model');
 
 
 /**
@@ -24,6 +25,21 @@ const addUser = async function (req, res, next) {
         await UserService.addUser(username, pwHash, email);
         return res.status(200).json('User added');
 
+    } catch (e) {
+        return res.status(400).json({ status: 400, message: e.message });
+    }
+}
+
+const getUserGameState = async function(req, res, next) {
+    const username = req.params.username;
+
+    try{
+        let gamestate = await UserService.getUserGameState(username);
+        //return res.status(200).json(gamestate);
+        if(gamestate.result=="Active")
+            return res.status(200).json({gamestate:gamestate, active:true});
+        else
+            return res.status(200).json({message:'No Active Game', active:false});
     } catch (e) {
         return res.status(400).json({ status: 400, message: e.message });
     }
@@ -144,4 +160,4 @@ const disableWordlist = async function (req, res, next) {
     }
 }*/
 
-module.exports = { addUser, getUser, addWordlist, getAllWordlists, deleteWordlist, enableWordlists, getProfilePageInfo };
+module.exports = { addUser, getUser, addWordlist, getAllWordlists, deleteWordlist, enableWordlists, getProfilePageInfo, getUserGameState };

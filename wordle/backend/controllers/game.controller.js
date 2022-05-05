@@ -32,9 +32,9 @@ const startGame = async function (req, res, next) {
         const secretWord = wordlist[selectedWord];
 
         //gamestate of a new game
-        const gamestate = { secretWord: secretWord, remainingGuesses: numGuesses, result: "In Progress", pastGuesses: [] };
+        const gamestate = { secretWord: secretWord, remainingGuesses: numGuesses, result: "Active", pastGuesses: [] };
         UserService.updateUserGameState(username, gamestate)
-            return res.status(200).json({ status: 200, message: `Game Started. Word is ${secretWord}` });
+            return res.status(200).json({ status: 200, message: `Game Started. Word is ${secretWord}`, secretWord: secretWord});
     } catch (e) {
         return res.status(400).json({ status: 400, message: e.message });
     }
@@ -56,7 +56,7 @@ const makeGuess = async function (req, res, next) {
             return res.status(200).json({ status: 200, message: `Invalid guess. Guesses remaining: ${gamestate.remainingGuesses}` });
         } else {
             await UserService.updateUserGameState(username, newGamestate)
-            return res.status(200).json({ status: 200, message: `matches: ${matches}, new game state: ${newGamestate}` });
+            return res.status(200).json({ status: 200, message: `matches: ${matches}, new game state: ${newGamestate}`, matches:matches, gamestate:newGamestate });
         }
     } catch (e) {
         return res.status(400).json({ status: 400, message: e.message });
