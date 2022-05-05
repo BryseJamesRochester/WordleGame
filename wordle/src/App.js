@@ -47,7 +47,6 @@ function setBoard(boardChanges) {
 }
 
 function App() {
-
   const token = getToken()
 
   if (!token) {
@@ -63,16 +62,16 @@ function App() {
               <Navbar.Brand href="/">Wordle</Navbar.Brand>
             </Col>
 
-            <Col md={{ span: 2 }}>
+            <Col style={{ whiteSpace: "nowrap", overflow: "hidden" }}>
               <Nav.Link href="/game">Single Player</Nav.Link>
             </Col>
-            <Col md={{ span: 1 }}>
-              <Nav.Link href="">Duel</Nav.Link>
+            <Col>
+              <Nav.Link href="">Multiplayer</Nav.Link>
             </Col>
-            <Col md={{ span: 1 }}>
+            <Col>
               <Nav.Link href="/profile">Profile</Nav.Link>
             </Col>
-            <Col md={{ span: 1 }}>
+            <Col>
               <Nav.Link href="/login">Login</Nav.Link>
             </Col>
           </Container>

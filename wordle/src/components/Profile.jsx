@@ -5,12 +5,11 @@ import profilePic from "../assets/defaultUserPic.jpg"
 import axios from "axios"
 
 function Profile() {
-  const [username, setUsername] = useState("")
+  const [username, setUsername] = useState("test")
   const [userData, setUserData] = useState("")
 
   function setUser1() {
     setUsername((username) => "brandon")
-
   }
   function setUser2() {
     setUsername((username) => "test")
@@ -20,20 +19,26 @@ function Profile() {
   }
 
   React.useEffect(() => {
-    axios.get('localhost:5001/users/brandon/profile').then((response) => {
-      setUserData(response.data)
-    }).catch(error => console.log(error));
-  }, [])
+    axios
+      .get("http://localhost:5001/users/" + username + "/profile")
+      .then((response) => {
+        setUserData(response.data)
+      })
+      .catch((error) => console.log(error))
+  }, [username])
 
   return (
     <div
-      style={{
-        position: "absolute",
-        left: "50%",
-        top: "10%",
-        transform: "translate(-50%, 0%)",
-      }}
+      // style={{
+      //   position: "absolute",
+      //   left: "50%",
+      //   top: "10%",
+      //   transform: "translate(-50%, 0%)",
+      // }}
     >
+      <Container fluid className=" my-5">
+        <Row>
+        <Col xs={6} sm ={6} md={6} lg={6} xl={6}>
       <Container className="justify-content-center d-flex">
         <Image
           className="rounded"
@@ -41,74 +46,109 @@ function Profile() {
           src={profilePic}
         />
       </Container>
-      <Card>
-        <Card.Body>
-          <Card.Title>User Info</Card.Title>
-          <Card.Text>
-            <Row>
-              <Col>
-                <Stack gap={1}>
+      <Container style={{ whiteSpace: "nowrap", overflow: "hidden" }}>
+        <Card>
+          <Card.Body>
+            <Card.Title>User Info</Card.Title>
+            <Card.Text>
+              <Row>
+                <Col>
                   <div>Username:</div>
+                </Col>
+                <Col>
+                  <div>{username && <div>{username}</div>}</div>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
                   <div>Email:</div>
-                </Stack>
-              </Col>
-              <Col>
-                <Stack gap={1}>
-                  <div>{username}</div>
-                  <div>brandonong66@gmail.com</div>
-                </Stack>
-              </Col>
-            </Row>
-          </Card.Text>
-        </Card.Body>
-      </Card>
+                </Col>
+                <Col className="text-nowrap">
+                  <div>{userData.email && <div>{userData.email}</div>}</div>
+                </Col>
+              </Row>
+            </Card.Text>
+          </Card.Body>
+        </Card>
 
-      <Card>
-        <Card.Body>
-          <Card.Title>Single Player</Card.Title>
-          <Card.Text>
-            <Row>
-              <Col>
-                <Stack gap={1}>
-                  <div>Games Played:</div>
+        <Card>
+          <Card.Body>
+            <Card.Title>Single Player</Card.Title>
+            <Card.Text>
+              <Row>
+                <Col>
+                  <div >Games Played:</div>
+                </Col>
+                <Col>
+                  <div>
+                    {userData.stats && userData.stats.gamesPlayed && (
+                      <div >{userData.stats.gamesPlayed}</div>
+                    )}
+                  </div>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
                   <div>Games Won:</div>
-                </Stack>
-              </Col>
-              <Col>
-                <Stack gap={1}>
-                  <div>x</div>
-                  <div>x</div>
-                </Stack>
-              </Col>
-            </Row>
-          </Card.Text>
-        </Card.Body>
-      </Card>
-      <Card>
-        <Card.Body>
-          <Card.Title>Multiplayer</Card.Title>
-          <Card.Text>
-            <Row>
-              <Col>
-                <Stack gap={1}>
+                </Col>
+                <Col>
+                  <div>
+                    {userData.stats && userData.stats.gamesWon && (
+                      <div>userData.stats.gamesWon</div>
+                    )}
+                  </div>
+                </Col>
+              </Row>
+            </Card.Text>
+          </Card.Body>
+        </Card>
+        <Card>
+          <Card.Body>
+            <Card.Title>Multiplayer</Card.Title>
+            <Card.Text>
+              <Row>
+                <Col>
                   <div>Games Played:</div>
+                </Col>
+                <Col>
+                  <div>
+                    {userData.stats &&
+                      userData.stats.multiplayerGamesPlayed && (
+                        <div>userData.stats.multiplayerGamesPlayed</div>
+                      )}
+                  </div>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
                   <div>Games Won:</div>
-                </Stack>
-              </Col>
-              <Col>
-                <Stack gap={1}>
-                  <div>x</div>
-                  <div>x</div>
-                </Stack>
-              </Col>
-            </Row>
-          </Card.Text>
-        </Card.Body>
-      </Card>
-      <button onClick={setUser1}>brandon</button>
+                </Col>
+                <Col>
+                  <div>
+                    {userData.stats && userData.stats.multiplayerGamesWon && (
+                      <div>userData.stats.multiplayerGamesWon</div>
+                    )}
+                  </div>
+                </Col>
+              </Row>
+            </Card.Text>
+          </Card.Body>
+        </Card>
+        <button onClick={setUser1}>brandon</button>
       <button onClick={setUser2}>test</button>
       <button onClick={log}>log</button>
-
+      </Container>
+      </Col>
+      <Col xs={6} sm ={6} md={6} lg={6} xl={6}>
+        <Card>
+          <Card.Body>
+            <Card.Title>Wordlists</Card.Title>
+          </Card.Body>
+        </Card>
+      </Col>
+      
+      </Row>
+      </Container>
     </div>
   )
 }
