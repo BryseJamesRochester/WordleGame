@@ -35,7 +35,11 @@ const userSchema = new Schema({
         secretWord: String,
         remainingGuesses: Number,
         result: String,
-        pastGuesses: [String]
+        pastGuesses: [{
+            _id:false,
+            guess:String, 
+            matches:[Number]
+        }]
     },
     wordlists: [{
         name: String,
