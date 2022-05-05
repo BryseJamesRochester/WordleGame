@@ -113,17 +113,26 @@ const deleteWordlist = async function (req, res, next) {
     }
 }
 
-const enableWordlist = async function (req, res, next) {
+const enableWordlists = async function (req, res, next) {
     const username = req.params.username;
-    const wordlistName = req.body.wordlistName;
+    const wordlistNames = req.body.wordlistNames;
     try {
-        await CustomWordlistService.enableWordlistByName(username, wordlistName);
-        return res.status(200).json(`Enabled word list ${wordlistName}`);
+        const wordlists = await CustomWordlistService.getAllWordlists(username);
+        const allNames = wordlists.map(list => {return list.name});
+        const enabledLists = wordlists.map(list => {if(list.enabled) return list.name});
+        allNames.forEach(name => {
+            if (wordlistNames.includes(name)&&!enabledLists.includes(name))
+                CustomWordlistService.enableWordlistByName(username, name);
+            else if (!wordlistNames.includes(name) && enabledLists.includes(name))
+                CustomWordlistService.disableWordlistByName(username, name)
+        });
+        return res.status(200).json(`Enabled word lists`);
     } catch (e) {
         return res.status(400).json({ status: 400, message: e.message });
     }
 }
 
+/*
 const disableWordlist = async function (req, res, next) {
     const username = req.params.username;
     const wordlistName = req.body.wordlistName;
@@ -133,6 +142,6 @@ const disableWordlist = async function (req, res, next) {
     } catch (e) {
         return res.status(400).json({ status: 400, message: e.message });
     }
-}
+}*/
 
-module.exports = { addUser, getUser, addWordlist, getAllWordlists, deleteWordlist, enableWordlist, disableWordlist, getProfilePageInfo };
+module.exports = { addUser, getUser, addWordlist, getAllWordlists, deleteWordlist, enableWordlists, getProfilePageInfo };
