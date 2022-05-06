@@ -15,7 +15,7 @@ import {
   Nav,
   Button,
 } from "react-bootstrap"
-import Login from "./components/Login/Login"
+import LoginPage from "./components/Login/LoginPage"
 import useToken from "./useToken"
 import {
   boardCurrent,
@@ -82,6 +82,7 @@ function App() {
         <Route path="/game" element={<Game />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/" element={<Home />} />
+        <Route path="/login" component={LoginPage} />
       </Routes>
     </Router>
   )
