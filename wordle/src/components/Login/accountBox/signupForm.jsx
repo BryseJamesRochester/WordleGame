@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import {
   BoldLink,
   BoxContainer,
@@ -10,7 +10,10 @@ import {
 import { Marginer } from "../marginer";
 import { AccountContext } from "./accountContext";
 
-export function SignupForm(props) {
+export function SignupForm(props, { setToken }) {
+  const [username, setUsername] = useState();
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
   const { switchToSignin } = useContext(AccountContext);
 
   return (
