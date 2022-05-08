@@ -22,14 +22,14 @@ async function loginUser(credentials) {
 }
 
 export function LoginForm(props, { setToken }) {
-  const [email, setEmail] = useState();
+  const [username, setUsername] = useState();
   const [password, setPassword] = useState();
   const { switchToSignup } = useContext(AccountContext);
 
   const handleSubmit = async e => {
     e.preventDefault();
     const token = await loginUser({
-      email,
+      username,
       password
     });
     setToken(token);
@@ -38,7 +38,7 @@ export function LoginForm(props, { setToken }) {
   return (
     <BoxContainer>
       <FormContainer onSubmit={handleSubmit}>
-        <Input type="email" placeholder="Email" onChange={e => setEmail(e.target.value)}/>
+        <Input type="username" placeholder="Username" onChange={e => setUsername(e.target.value)}/>
         <Input type="password" placeholder="Password" onChange={e => setPassword(e.target.value)}/>
       </FormContainer>
       <Marginer direction="vertical" margin={10} />

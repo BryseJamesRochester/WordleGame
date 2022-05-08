@@ -1,6 +1,6 @@
 import './LoginPage.css';
 import styled from "styled-components"
-import {AccountBox} from "./components/accountBox"
+import {AccountBox} from "./accountBox"
 
 const AppContainer = styled.div`
   width: 100%;

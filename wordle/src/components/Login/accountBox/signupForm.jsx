@@ -12,7 +12,7 @@ import { AccountContext } from "./accountContext";
 
 export function SignupForm(props, { setToken }) {
   const [username, setUsername] = useState();
-  const [email, setEmail] = useState();
+  // const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const { switchToSignin } = useContext(AccountContext);
 
@@ -20,7 +20,7 @@ export function SignupForm(props, { setToken }) {
     <BoxContainer>
       <FormContainer>
         <Input type="text" placeholder="Username" />
-        <Input type="email" placeholder="Email" />
+        {/* <Input type="email" placeholder="Email" /> */}
         <Input type="password" placeholder="Password" />
         <Input type="password" placeholder="Confirm Password" />
       </FormContainer>
