@@ -36,10 +36,10 @@ function Profile() {
       //   transform: "translate(-50%, 0%)",
       // }}
     >
-      <Container fluid className=" my-5">
+      <Container fluid className="my-5">
         <Row>
-        <Col xs={6} sm ={6} md={6} lg={6} xl={6}>
-      <Container className="justify-content-center d-flex">
+        <Col>
+      <Container className="">
         <Image
           className="rounded"
           style={{ height: "150px", width: "150px" }}
@@ -139,7 +139,7 @@ function Profile() {
       <button onClick={log}>log</button>
       </Container>
       </Col>
-      <Col xs={6} sm ={6} md={6} lg={6} xl={6}>
+      <Col>
         <Card>
           <Card.Body>
             <Card.Title>Wordlists</Card.Title>
