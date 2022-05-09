@@ -38,9 +38,29 @@ const checkGuess = function(gamestate, guess){
      * @returns array with info about each letter(0-match, 1-letter is in the word but in wrong place, 2-letter not in word)
      */
 const compareGuess = function(secretWord, guess) {
+    let obj = {};
+    for(let i = 0; i<secretWord.length;i++){
+        if(obj[secretWord[i]] == undefined)
+        {
+            obj[secretWord[i]] = 1;
+        }
+        else
+        {
+            obj[secretWord[i]] += 1;
+        }
+    }
+   
     let matches = Array.prototype.map.call(guess, (letter, i) => {
-        if (letter === secretWord.charAt(i)) return 0;
-        if (secretWord.includes(letter)) return 1;
+        
+        if (letter === secretWord.charAt(i) && obj[letter] != undefined && obj[letter] > 0){
+           
+            obj[letter] = obj[letter] - 1; 
+            return 0;
+        }
+        if (secretWord.includes(letter) && obj[letter] != undefined && obj[letter] > 0){ 
+            obj[letter] = obj[letter] - 1; 
+            return 1;
+        }
         return 2;
     })
     return matches;

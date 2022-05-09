@@ -1,11 +1,10 @@
-import React, {useContext} from "react"
+import React, {useContext, useEffect} from "react"
 import { AppContext } from "./Game"
 import { wordAnswer, boardDefault } from "./Words"
 
 function Square(props) {
   const boardData = useContext(AppContext);
-
-  if (boardData.currentGuesses[props.col][props.row] === "0") {
+  if (boardData.currentGuesses[props.col][props.row] === "2") {
     return (
       <svg width="110" height="110" viewBox="0 0 110 110">
         <g>
@@ -59,7 +58,7 @@ function Square(props) {
         </g>
       </svg>
     )
-  } else if (boardData.currentGuesses[props.col][props.row] === "2") {
+  } else if (boardData.currentGuesses[props.col][props.row] === "0") {
     return (
       <svg width="110" height="110" viewBox="0 0 110 110">
         <g>
