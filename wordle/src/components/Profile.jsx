@@ -1,18 +1,20 @@
-import React, { useState } from "react"
+import React, { useState, useContext } from "react"
 import { Container, Row, Col, Stack, Card } from "react-bootstrap"
 import Image from "react-bootstrap/Image"
 import profilePic from "../assets/defaultUserPic.jpg"
 import axios from "axios"
+import Wordlists from "./Wordlists"
+import { UserContext } from "../App"
 
 function Profile() {
-  const [username, setUsername] = useState("test")
+  const [currentUser, setcurrentUser] = useState("test")
   const [userData, setUserData] = useState("")
 
   function setUser1() {
-    setUsername((username) => "brandon")
+    setcurrentUser((currentUser) => "brandon")
   }
   function setUser2() {
-    setUsername((username) => "test")
+    setcurrentUser((currentUser) => "test")
   }
   function log() {
     console.log(userData)
@@ -20,22 +22,15 @@ function Profile() {
 
   React.useEffect(() => {
     axios
-      .get("http://localhost:5001/users/" + username + "/profile")
+      .get("http://localhost:5001/users/" + currentUser + "/profile")
       .then((response) => {
         setUserData(response.data)
       })
       .catch((error) => console.log(error))
-  }, [username])
+  }, [currentUser])
 
   return (
-    <div
-      // style={{
-      //   position: "absolute",
-      //   left: "50%",
-      //   top: "10%",
-      //   transform: "translate(-50%, 0%)",
-      // }}
-    >
+    <div>
       <Container fluid className="my-5">
         <Row>
         <Col>
@@ -56,7 +51,7 @@ function Profile() {
                   <div>Username:</div>
                 </Col>
                 <Col>
-                  <div>{username && <div>{username}</div>}</div>
+                  <div>{currentUser && <div>{currentUser}</div>}</div>
                 </Col>
               </Row>
               <Row>
@@ -140,11 +135,7 @@ function Profile() {
       </Container>
       </Col>
       <Col>
-        <Card>
-          <Card.Body>
-            <Card.Title>Wordlists</Card.Title>
-          </Card.Body>
-        </Card>
+        <Wordlists />
       </Col>
       
       </Row>
@@ -152,5 +143,4 @@ function Profile() {
     </div>
   )
 }
-
 export default Profile
