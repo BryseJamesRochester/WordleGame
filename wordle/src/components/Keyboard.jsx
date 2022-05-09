@@ -4,6 +4,7 @@ import { Container, Row, Col } from 'react-bootstrap'
 import { AppContext } from "./Game"
 import { checkGameState } from './Words';
 import axios from 'axios';
+
 var col = 0;
 //btn colors
 var yellow = "btn btn-warning";
@@ -19,15 +20,14 @@ function updateBoard(input, context){
   }
   if(!context.gameWon && context.gameOver){
         return;
-  }
-  if(col >= 5)
-    return;
-  console.log(context.board)
+  }  
   var boardGuesses = JSON.parse(JSON.stringify(context.board))
-  console.log(boardGuesses)
+  
   boardGuesses.gameBoard[6 - context.board.remainingGuesses][col] = input;
   context.setData(boardGuesses)
-  if(col<5){
+  console.log(boardGuesses)
+  console.log(context.board)
+  if(col<4){
     col = col+1;
   }
 
@@ -65,37 +65,37 @@ function handleEnter(context,setData){
 }
 
 function updateKeyboard(context){
-  var attempts = [...context.board.boardState];
-  var guess = [...context.board.matches];
-  for (let i = 0; i < attempts[context.board.remainingGuesses].length; i++){
-    var keyID = "key_" + attempts[context.board.remainingGuesses][i].toLowerCase();
-    console.log(document.getElementById(keyID).className)
-      if(guess[context.board.remainingGuesses][i] === "0"){
-        document.getElementById(keyID).className = grey;
-      }
-      else if(guess[context.board.remainingGuesses][i] === "1" ){
-        document.getElementById(keyID).className = yellow;
-      }
-      else if(guess[context.board.remainingGuesses][i] === "2"){
-        document.getElementById(keyID).className = green;
-
-      }
+  // compare input with matches array to determine color
+  console.log("updating keyboard")
+  var input = context.board.gameBoard[6 - context.remainingGuesses].join("").toLowerCase()
+  var matches = context.board.matches[6 - context.remainingGuesses]; 
+  for(let i = 0; i < matches.length; i++){
+    var key_id = "key_" + input.charAt(i)
+    if(matches[i] === 0){
+      document.getElementById(key_id).className = green
+    }
+    if(matches[i] === 1 && document.getElementById(key_id).className !== green){
+      document.getElementById(key_id).className = yellow
+    }
+    if(matches[i] === 2 && document.getElementById(key_id).className !== green && document.getElementById(key_id) !== yellow){
+      document.getElementById(key_id).className = grey
+    }
   }
 }
 
 function handleBackspace(context){
   if(context.gameWon && context.gameOver){
-    return;
+    return
   }
   if(!context.gameWon && context.gameOver){
-        return;
+    return
   }
+  var board = JSON.parse(JSON.stringify(context.board))
+  board.gameBoard[6 - board.remainingGuesses][col] = ''
+  context.setData(board)
+  console.log(board)
   if(col > 0)
-    col = col - 1;
-  var boardGuesses = [...context.board.boardState];
-  boardGuesses[context.board.remainingGuesses][col] = "";
-  context.setBoard(boardGuesses);
- 
+    col = col - 1
 }
 
 
@@ -125,22 +125,45 @@ function Keyboard() {
   const gameState = useContext(AppContext)
 
   useEffect( () => {
-    console.log(gameState.gamestate)
-    console.log(gameState.board)
+   
   },[gameState.fetchDone])
 
   useEffect( () => {
-    console.log(responseData)
-    // update remainingGuesses and matches in boardData
-    var board= JSON.parse(JSON.stringify(gameState.board))
-    board.remainingGuesses -= 1; 
-    gameState.setData(board);
-
-    console.log(gameState.board)
-
-
+    if(responseData !== null){
+      if(responseData.gamestate.result === 'lose'){
+        gameState.setGameOver(true)
+        console.log(gameState.gameOver)
+        return
+      }
+      if(responseData.gamestate.result === 'win'){
+        gameState.setGameWon(true)
+        gameState.setGameOver(true)
+        console.log(gameState.gameWon)
+        return
+      }
+      console.log(responseData)
+      // update remainingGuesses and matches in boardData
+      var board= JSON.parse(JSON.stringify(gameState.board))
+      board.matches[6 - board.remainingGuesses] = responseData.matches
+      board.remainingGuesses -= 1; 
+      console.log(responseData)
+      console.log(board)
+      gameState.setData(board);
+      console.log(gameState.board)
+    }
   },[responseData])
 
+  useEffect(() => {
+    if(!gameState.gameWon && gameState.gameOver)
+    {
+      alert(gameOverMsg)
+      return
+    }
+    if(gameState.gameWon && gameState.gameOver){
+      alert(gameWonMsg)
+      return
+    }
+  },[gameState.gameOver])
 
 
     //  useEffect( () => {
@@ -165,24 +188,24 @@ function Keyboard() {
 //   }
 //  },[gameState.board.remainingGuesses]);
 
-//   const handleKeyboard = useCallback((event) => {
-//     if(event.key === "Enter"){
-//       handleEnter(gameState);
-//     }
-//     else if(event.key === "Backspace"){
-//       handleBackspace(gameState);
-//     }
-//     else if(event.keyCode >= 65 && event.keyCode <= 90){
-//       updateBoard(event.key.toUpperCase(),gameState);
-//     }
-//   })
-//   useEffect(() => {
-//     document.addEventListener("keydown",handleKeyboard);
+  const handleKeyboard = useCallback((event) => {
+    if(event.key === "Enter"){
+      handleEnter(gameState);
+    }
+    else if(event.key === "Backspace"){
+      handleBackspace(gameState);
+    }
+    else if(event.keyCode >= 65 && event.keyCode <= 90){
+      updateBoard(event.key.toUpperCase(),gameState);
+    }
+  })
+  useEffect(() => {
+    document.addEventListener("keydown",handleKeyboard);
   
-//     return () => {
-//       document.removeEventListener("keydown", handleKeyboard)
-//     };
-//   },[handleKeyboard])
+    return () => {
+      document.removeEventListener("keydown", handleKeyboard)
+    };
+  },[handleKeyboard])
 
 
 
