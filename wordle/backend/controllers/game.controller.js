@@ -50,6 +50,7 @@ const makeGuess = async function (req, res, next) {
     const guess = req.body.guess;
     const username = req.params.username;
     try {
+        if (guess == undefined) throw Error("guess not defined");
         const gamestate = await UserService.getUserGameState(username);
         const {gamestate: newGamestate, matches} = GameService.checkGuess(gamestate, guess);
         if (newGamestate.invalid) {

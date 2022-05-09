@@ -2,7 +2,6 @@
 const UserService = require('../services/user.service');
 const CustomWordlistService = require('../services/customWordlist.service');
 const EncryptionService = require('../services/encryption.service');
-const { User } = require('../models/user.model');
 
 
 /**
@@ -87,6 +86,8 @@ const addWordlist = async function (req, res, next) {
     const wordlistName = req.body.wordlistName;
     const wordlist = req.body.wordlist;
     try {
+        if (wordlistName == undefined) throw Error("wordlistName not defined");
+        if (wordlist == undefined) throw Error("wordlist not defined");
         await CustomWordlistService.addWordlist(username, wordlistName, wordlist);
         return res.status(200).json('Wordlist added');
 
@@ -122,6 +123,7 @@ const deleteWordlist = async function (req, res, next) {
     const wordlistName = req.body.wordlistName;
 
     try {
+        if (wordlistName == undefined) throw Error("wordlistName not defined");
         await CustomWordlistService.deleteWordlistByName(username, wordlistName);
         return res.status(200).json(`Deleted word list`);
     } catch (e) {
@@ -133,6 +135,7 @@ const enableWordlists = async function (req, res, next) {
     const username = req.params.username;
     const wordlistNames = req.body.wordlistNames;
     try {
+        if (wordlistNames == undefined) throw Error("wordlistNames not defined");
         const wordlists = await CustomWordlistService.getAllWordlists(username);
         const allNames = wordlists.map(list => {return list.name});
         const enabledLists = wordlists.map(list => {if(list.enabled) return list.name});
