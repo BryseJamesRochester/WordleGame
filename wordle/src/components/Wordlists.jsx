@@ -16,7 +16,7 @@ import setcurrentUser from "./Profile"
 function Wordlists() {
   const [currentUser, setcurrentUser] = useState("test")
   const [wordlistData, setWordlistData] = useState()
-  const [wordlistCount, setWordlistCount] = useState()
+  const [wordlistCount, setWordlistCount] = useState(0)
   const [formData, setFormData] = useState({
     title: "",
     words: "",
@@ -35,18 +35,36 @@ function Wordlists() {
         setWordlistData(response.data)
       })
       .catch((error) => console.log(error))
-  }, [currentUser])
+  }, [currentUser, wordlistCount])
 
   const handleSubmit = (event) => {
+    let validInput = true
     const wordsArray = formData.words.trim().split(" ")
-    axios
-      .post("http://localhost:5001/users/" + currentUser + "/wordlist/add", {
-        wordlistName: formData.title,
-        wordlist: wordsArray,
-      })
-      .then((response) => {
-        console.log(response)
-      })
+    for (const word of wordsArray) {
+      if (word.length != 5) {
+        alert("Error: All words must be 5 characters long")
+        validInput = false
+        break
+      }
+    }
+    for (const list of wordlistData)
+    {
+        if(list.name===formData.title) {
+            alert("Error: Title must be unique ")
+            validInput=false
+            break
+        }
+    }
+    if (validInput) {
+      axios
+        .post("http://localhost:5001/users/" + currentUser + "/wordlist/add", {
+          wordlistName: formData.title,
+          wordlist: wordsArray,
+        })
+        .then((response) => {
+          console.log(response)
+        })
+    }
   }
 
   const handleChange = (event) => {
@@ -57,12 +75,27 @@ function Wordlists() {
   }
 
   function deleteWordList(listName) {
-    axios.delete(
-      "http://localhost:5001/users/" + currentUser + "/wordlist/delete",
-      {
-        wordlistName: listName,
-      }
-    )
+    axios
+      .delete(
+        "http://localhost:5001/users/" + currentUser + "/wordlist/delete",
+        {
+          headers: {},
+          data: {
+            wordlistName: listName,
+          },
+        }
+      )
+      .then()
+  }
+  function updateWordlistCount() {
+    axios
+      .get("http://localhost:5001/users/" + currentUser + "/wordlist/all")
+      .then((response) => {
+        setWordlistData(response.data)
+      })
+      .catch((error) => console.log(error))
+    setWordlistCount(Object.keys(wordlistData).length)
+    console.log("wordlistcount updated")
   }
   return (
     <div>
@@ -86,7 +119,15 @@ function Wordlists() {
                             </div>
                           )}
                           <div className="d-flex justify-content-end">
-                            <Button variant="danger">Delete</Button>
+                            <Button
+                              variant="danger"
+                              onClick={() => {
+                                deleteWordList(list.name.toString())
+                                updateWordlistCount()
+                              }}
+                            >
+                              Delete
+                            </Button>
                           </div>
                         </Card.Text>
                       </Card.Body>
