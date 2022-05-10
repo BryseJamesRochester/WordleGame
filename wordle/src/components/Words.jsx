@@ -32,6 +32,27 @@ export function checkGameState(index,context){
 }
 
 
+// base board data 
+export const defaultData = {
+    gameBoard :  
+    [["","","","",""],
+    ["","","","",""],
+    ["","","","",""],
+    ["","","","",""],
+    ["","","","",""],
+    ["","","","",""]]
+
+    , matches :
+    [["","","","",""],
+    ["","","","",""],
+    ["","","","",""],
+    ["","","","",""],
+    ["","","","",""],
+    ["","","","",""]],
+
+    remainingGuesses: 6
+}
+
 
 export const boardDefault = [
     ["","","","",""],
