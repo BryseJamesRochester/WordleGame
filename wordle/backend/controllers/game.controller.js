@@ -55,7 +55,7 @@ const makeGuess = async function (req, res, next) {
         const {gamestate: newGamestate, matches} = GameService.checkGuess(gamestate, guess);
         if (newGamestate.invalid) {
             return res.status(200).json({ status: 200, message: `Invalid guess. Guesses remaining: ${gamestate.remainingGuesses}` });
-        } else {
+        } else {        
             await UserService.updateUserGameState(username, newGamestate)
             return res.status(200).json({ status: 200, matches:matches, gamestate:newGamestate });
         }
