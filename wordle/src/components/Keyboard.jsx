@@ -19,21 +19,19 @@ function updateBoard(input, context){
     return;
   }
   if(!context.gameWon && context.gameOver){
-        return;
+    return;
   }  
   var boardGuesses = JSON.parse(JSON.stringify(context.board))
   
   boardGuesses.gameBoard[6 - context.board.remainingGuesses][col] = input;
   context.setData(boardGuesses)
-  console.log(boardGuesses)
-  console.log(context.board)
   if(col<4){
     col = col+1;
   }
 
 }
 
-function handleEnter(context,setData){ 
+function handleEnter(context){ 
   if(context.gameWon && context.gameOver){
     return;
   }
@@ -44,9 +42,7 @@ function handleEnter(context,setData){
    if(input.length !== 5){
     alert("Guess must be 5 letters");
     return;
-   }
-  if(col === 5){
-    
+   }    
     col = 0;
     const options = {
       method: 'POST',
@@ -56,28 +52,22 @@ function handleEnter(context,setData){
     };
     
     axios.request(options).then(function (response) {
-     setData(response.data)
+      context.getResponse(response.data)
      }).catch(function (error) {
       console.error(error);
     });
-
-   }
 }
 
-function updateKeyboard(context){
-  // compare input with matches array to determine color
-  console.log("updating keyboard")
-  var input = context.board.gameBoard[6 - context.remainingGuesses].join("").toLowerCase()
-  var matches = context.board.matches[6 - context.remainingGuesses]; 
-  for(let i = 0; i < matches.length; i++){
-    var key_id = "key_" + input.charAt(i)
-    if(matches[i] === 0){
+function updateKeyboard(board){
+  for(let i = 0; i < board.matches[6-board.remainingGuesses].length; i++){
+    var key_id = 'key_' + board.gameBoard[6 - board.remainingGuesses][i].toLowerCase()
+    if(board.matches[6 - board.remainingGuesses][i] === 0){
       document.getElementById(key_id).className = green
     }
-    if(matches[i] === 1 && document.getElementById(key_id).className !== green){
+    if(board.matches[6 - board.remainingGuesses][i] === 1 && document.getElementById(key_id).className !== green){
       document.getElementById(key_id).className = yellow
     }
-    if(matches[i] === 2 && document.getElementById(key_id).className !== green && document.getElementById(key_id) !== yellow){
+    if(board.matches[6 - board.remainingGuesses][i] === 2 && document.getElementById(key_id).className !== green && document.getElementById(key_id) !== yellow){
       document.getElementById(key_id).className = grey
     }
   }
@@ -99,64 +89,63 @@ function handleBackspace(context){
 }
 
 
-function updatePreviousState(context){
-  var attempts = [...context.board.boardState];
+function loadPreviousState(context){
+  var attempts = [...context.board.gameBoard];
   var guess = [...context.board.matches];
-  for(let j = 0; j < guess.length; j++ ){
-    for (let i = 0; i < guess[j].length; i++){
-      var keyID = "key_" + attempts[j][i].toLowerCase();
-      console.log(document.getElementById(keyID).className)
-        if(guess[j][i] === "0"){
-          document.getElementById(keyID).className = grey;
-        }
-        else if(guess[j][i] === "1" ){
-          document.getElementById(keyID).className = yellow;
-        }
-        else if(guess[j][i] === "2"){
-          document.getElementById(keyID).className = green;
-        }
+  console.log(attempts)
+  console.log(guess)
+  for(let row = 0; row < guess.length; row++){
+    for(let col = 0; col < attempts[row].length; col++){
+      var key_id = 'key_' + attempts[row][col].toLowerCase()
+      if(guess[row][col] === 0){
+        document.getElementById(key_id).className = green
+      }
+      if(guess[row][col] === 1 && document.getElementById(key_id).className !== green){
+        document.getElementById(key_id).className = yellow
+      }
+      if(guess[row][col] === 2 && document.getElementById(key_id).className !== green && document.getElementById(key_id) !== yellow){
+        document.getElementById(key_id).className = grey
+      }
+      if(guess[row][col] === '')
+        break
     }
   }
- 
 }
 
 function Keyboard() {
-  const [responseData, getData] = useState(null)
+  const [secretWord, setWord] = useState("")
   const gameState = useContext(AppContext)
 
   useEffect( () => {
-   
+   if(gameState.fetchDone){
+      loadPreviousState(gameState)
+   }
   },[gameState.fetchDone])
 
   useEffect( () => {
-    if(responseData !== null){
-      if(responseData.gamestate.result === 'lose'){
+    if(gameState.inputResponse !== null){
+      setWord(gameState.inputResponse.gamestate.secretWord)
+      var board= JSON.parse(JSON.stringify(gameState.board))
+      board.matches[6 - board.remainingGuesses] = gameState.inputResponse.matches
+      updateKeyboard(board)
+      board.remainingGuesses -= 1; 
+      gameState.setData(board)    
+      if(gameState.inputResponse.gamestate.result === 'lose'){
         gameState.setGameOver(true)
-        console.log(gameState.gameOver)
         return
       }
-      if(responseData.gamestate.result === 'win'){
+      if(gameState.inputResponse.gamestate.result === 'win'){
         gameState.setGameWon(true)
         gameState.setGameOver(true)
-        console.log(gameState.gameWon)
         return
       }
-      console.log(responseData)
-      // update remainingGuesses and matches in boardData
-      var board= JSON.parse(JSON.stringify(gameState.board))
-      board.matches[6 - board.remainingGuesses] = responseData.matches
-      board.remainingGuesses -= 1; 
-      console.log(responseData)
-      console.log(board)
-      gameState.setData(board);
-      console.log(gameState.board)
     }
-  },[responseData])
+  },[gameState.inputResponse])
 
   useEffect(() => {
     if(!gameState.gameWon && gameState.gameOver)
     {
-      alert(gameOverMsg)
+      alert(gameOverMsg + ". Correct Word: " + secretWord)
       return
     }
     if(gameState.gameWon && gameState.gameOver){
@@ -166,27 +155,7 @@ function Keyboard() {
   },[gameState.gameOver])
 
 
-    //  useEffect( () => {
-//   if(gameState.gamestate.active === true){
-//     updatePreviousState(gameState)
-//   }
-//  },[gameState.gamestate])
 
-//  useEffect ( () => { 
-//   gameState.setGameOver(gameState.gameWon);
-//  },[gameState.gameWon]);
-
-
-//  useEffect( () => {
-//   if(gameState.board.remainingGuesses > 5)
-//   gameState.setGameOver(true);
-//   if(gameState.gameOver){
-//     if(gameState.gameWon)
-//       alert(gameWonMsg);
-//     else
-//       alert(gameOverMsg);
-//   }
-//  },[gameState.board.remainingGuesses]);
 
   const handleKeyboard = useCallback((event) => {
     if(event.key === "Enter"){
@@ -206,13 +175,6 @@ function Keyboard() {
       document.removeEventListener("keydown", handleKeyboard)
     };
   },[handleKeyboard])
-
-
-
-
-
-  
-
 
   return (
     
@@ -252,7 +214,7 @@ function Keyboard() {
         <Row>
         <Col className="d-flex justify-content-center">
           <div className='btn-group'>
-            <Button id="key_Enter" variant="outline-dark" onClick={() => handleEnter(gameState,getData)}>ENTER</Button>{' '}
+            <Button id="key_Enter" variant="outline-dark" onClick={() => handleEnter(gameState)}>ENTER</Button>{' '}
             <Button id="key_z" variant="outline-dark" onClick={()=>{updateBoard("Z",gameState)}}>Z</Button>{' '}
             <Button id="key_x" variant="outline-dark" onClick={()=>{updateBoard("X",gameState)}}>X</Button>{' '}
             <Button id="key_c" variant="outline-dark" onClick={()=>{updateBoard("C",gameState)}}>C</Button>{' '}

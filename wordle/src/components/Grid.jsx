@@ -1,4 +1,4 @@
-import React, { useContext, useState, memo } from "react"
+import React, { useContext, useState} from "react"
 import { AppContext } from "./Game"
 import { Container, Row, Col } from "react-bootstrap"
 import Square from "./Square"
@@ -57,4 +57,4 @@ function Grid() {
   )
 }
 
-export default memo(Grid)
+export default Grid

@@ -46,7 +46,8 @@ function Game() {
   const [board, setData] = useState(defaultData)
   const [gameOver, setGameOver] = useState(false) // true if game is over
   const [gameWon, setGameWon] = useState(false)  // true if game is won
-  const [gamestate, setGamestate] = useState(null);
+  const [gamestate, setGamestate] = useState(null)
+  const [inputResponse, getResponse] = useState(null)
   const option = {
     method: 'GET',
     url: 'http://localhost:5000/users/test/gamestate',
@@ -58,7 +59,6 @@ function Game() {
       axios.request(option)
       .then((response) => {
           setGamestate(response.data)
-          fetchDone = true
         }
       ) 
     }
@@ -70,11 +70,11 @@ function Game() {
       if(gamestate.active){
         const obj = loadPrevGameState(gamestate, board)
         setData(obj)
-        
+        fetchDone = true
       }
       else if (!gamestate.active && count < 1){
         count++;
-        fetchDone = false;
+        fetchDone = false
           const options = {
             method: 'GET',
             url: 'http://localhost:5000/game/test/start',
@@ -101,8 +101,9 @@ function Game() {
       <Container className="mw-50">
         <Col md={{ span: 6, offset: 3 }}>
           <AppContext.Provider value={{board, setData, wordAnswer, checkGuess, 
-             gameOver, setGameOver, checkGameState, gameWon, setGameWon, gamestate, fetchDone}}>
-            {/* <Grid /> */}
+             gameOver, setGameOver, checkGameState, gameWon, setGameWon, gamestate, fetchDone,
+             inputResponse, getResponse}}>
+            <Grid />
             <Keyboard />
           </AppContext.Provider>
         </Col>
