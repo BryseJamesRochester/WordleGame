@@ -1,11 +1,11 @@
-import React, {useContext, useEffect, useCallback} from 'react'
+import React, {useContext, useEffect, useCallback, useState} from 'react'
 import Button from 'react-bootstrap/Button'
 import { Container, Row, Col } from 'react-bootstrap'
 import { AppContext } from "./Game"
 import { checkGameState } from './Words';
+import axios from 'axios';
 
-var x = 0;
-var y = 0;
+var col = 0;
 //btn colors
 var yellow = "btn btn-warning";
 var green = "btn btn-success";
@@ -19,98 +19,153 @@ function updateBoard(input, context){
     return;
   }
   if(!context.gameWon && context.gameOver){
-        return;
-  }
-  if(y >= 5)
     return;
-  var boardGuesses = [...context.board];
-  boardGuesses[x][y] = input;
-  context.setBoard(boardGuesses);
-  if(y<5){
-    y = y+1;
+  }  
+  var boardGuesses = JSON.parse(JSON.stringify(context.board))
+  
+  boardGuesses.gameBoard[6 - context.board.remainingGuesses][col] = input;
+  context.setData(boardGuesses)
+  if(col<4){
+    col = col+1;
   }
+
 }
 
-function handleEnter(context){
+function handleEnter(context){ 
   if(context.gameWon && context.gameOver){
     return;
   }
   if(!context.gameWon && context.gameOver){
     return;
   }
-  var input = context.board[x].join("");
+  var input = context.board.gameBoard[6 - context.board.remainingGuesses].join("");
    if(input.length !== 5){
     alert("Guess must be 5 letters");
     return;
-   }
-  if(y === 5){
+   }    
+    col = 0;
+    const options = {
+      method: 'POST',
+      url: 'http://localhost:5000/game/test/guess',
+      headers: {'Content-Type': 'application/json'},
+      data: {guess: input.toLowerCase()}
+    };
     
-    y = 0;
-    context.setGuesses(context.checkGuess(x));
-    updateKeyboard(context);
-    context.setGameWon(checkGameState(x,context));
-    if(x === 5)
-      context.setGameOver(true);
-    x++;
-   }
-   
+    axios.request(options).then(function (response) {
+      context.getResponse(response.data)
+     }).catch(function (error) {
+      console.error(error);
+    });
 }
 
-function updateKeyboard(context){
-  var attempts = [...context.board];
-  var guess = [...context.guesses];
-  for (let i = 0; i < attempts[x].length; i++){
-    var keyID = "key_" + attempts[x][i].toLowerCase();
-    console.log(document.getElementById(keyID).className)
-      if(guess[x][i] === "0"){
-        document.getElementById(keyID).className = grey;
-      }
-      else if(guess[x][i] === "1" ){
-        document.getElementById(keyID).className = yellow;
-      }
-      else if(guess[x][i] === "2"){
-        document.getElementById(keyID).className = green;
-
-      }
+function updateKeyboard(board){
+  for(let i = 0; i < board.matches[6-board.remainingGuesses].length; i++){
+    var key_id = 'key_' + board.gameBoard[6 - board.remainingGuesses][i].toLowerCase()
+    if(board.matches[6 - board.remainingGuesses][i] === 0){
+      document.getElementById(key_id).className = green
+    }
+    if(board.matches[6 - board.remainingGuesses][i] === 1 && document.getElementById(key_id).className !== green){
+      document.getElementById(key_id).className = yellow
+    }
+    if(board.matches[6 - board.remainingGuesses][i] === 2 && document.getElementById(key_id).className !== green && document.getElementById(key_id) !== yellow){
+      document.getElementById(key_id).className = grey
+    }
   }
 }
 
 function handleBackspace(context){
   if(context.gameWon && context.gameOver){
-    return;
+    return
   }
   if(!context.gameWon && context.gameOver){
-        return;
+    return
   }
-  if(y > 0)
-    y = y - 1;
-  var boardGuesses = [...context.board];
-  boardGuesses[x][y] = "";
-  context.setBoard(boardGuesses);
- 
+  var board = JSON.parse(JSON.stringify(context.board))
+  board.gameBoard[6 - board.remainingGuesses][col] = ''
+  context.setData(board)
+  console.log(board)
+  if(col > 0)
+    col = col - 1
 }
 
 
-function Keyboard() {
- const boardData = useContext(AppContext);
- boardData.setGameOver(boardData.gameWon);
- if(x > 5)
-  boardData.setGameOver(true);
-  if(boardData.gameOver){
-    if(boardData.gameWon)
-      alert(gameWonMsg);
-    else
-      alert(gameOverMsg);
+function loadPreviousState(context){
+  var attempts = [...context.board.gameBoard];
+  var guess = [...context.board.matches];
+  console.log(attempts)
+  console.log(guess)
+  for(let row = 0; row < guess.length; row++){
+    for(let col = 0; col < attempts[row].length; col++){
+      var key_id = 'key_' + attempts[row][col].toLowerCase()
+      if(guess[row][col] === 0){
+        document.getElementById(key_id).className = green
+      }
+      if(guess[row][col] === 1 && document.getElementById(key_id).className !== green){
+        document.getElementById(key_id).className = yellow
+      }
+      if(guess[row][col] === 2 && document.getElementById(key_id).className !== green && document.getElementById(key_id) !== yellow){
+        document.getElementById(key_id).className = grey
+      }
+      if(guess[row][col] === '')
+        break
+    }
   }
+}
+
+function Keyboard() {
+  const [secretWord, setWord] = useState("")
+  const gameState = useContext(AppContext)
+
+  useEffect( () => {
+   if(gameState.fetchDone){
+      loadPreviousState(gameState)
+   }
+  },[gameState.fetchDone])
+
+  useEffect( () => {
+    if(gameState.inputResponse !== null){
+      setWord(gameState.inputResponse.gamestate.secretWord)
+      var board= JSON.parse(JSON.stringify(gameState.board))
+      board.matches[6 - board.remainingGuesses] = gameState.inputResponse.matches
+      updateKeyboard(board)
+      board.remainingGuesses -= 1; 
+      gameState.setData(board)    
+      if(gameState.inputResponse.gamestate.result === 'lose'){
+        gameState.setGameOver(true)
+        return
+      }
+      if(gameState.inputResponse.gamestate.result === 'win'){
+        gameState.setGameWon(true)
+        gameState.setGameOver(true)
+        return
+      }
+    }
+  },[gameState.inputResponse])
+
+  useEffect(() => {
+    if(!gameState.gameWon && gameState.gameOver)
+    {
+      alert(gameOverMsg + ". Correct Word: " + secretWord)
+      return
+    }
+    if(gameState.gameWon && gameState.gameOver){
+      alert(gameWonMsg)
+      return
+    }
+  },[gameState.gameOver])
+
+
+
+
   const handleKeyboard = useCallback((event) => {
     if(event.key === "Enter"){
-      handleEnter(boardData);
+      handleEnter(gameState);
     }
     else if(event.key === "Backspace"){
-      handleBackspace(boardData);
+      handleBackspace(gameState);
     }
     else if(event.keyCode >= 65 && event.keyCode <= 90){
-      updateBoard(event.key.toUpperCase(),boardData);
+      updateBoard(event.key.toUpperCase(),gameState);
     }
   })
   useEffect(() => {
@@ -120,54 +175,54 @@ function Keyboard() {
       document.removeEventListener("keydown", handleKeyboard)
     };
   },[handleKeyboard])
-  
+
   return (
     
     <div>
       <Container>
       <Row>
           <Col className="d-flex justify-content-center">
-          <div class='btn-group'>
-            <Button id="key_q" variant="outline-dark" onClick={() => {updateBoard("Q",boardData)}}>Q</Button>{' '}
-            <Button id="key_w" variant="outline-dark" onClick={()=>{updateBoard("W",boardData)}}>W</Button>{' '}
-            <Button id="key_e" variant="outline-dark" onClick={()=>{updateBoard("E",boardData)}}>E</Button>{' '}
-            <Button id="key_r" variant="outline-dark" onClick={()=>{updateBoard("R",boardData)}}>R</Button>{' '}
-            <Button id="key_t" variant="outline-dark" onClick={()=>{updateBoard("T",boardData)}}>T</Button>{' '}
-            <Button id="key_y" variant="outline-dark" onClick={()=>{updateBoard("Y",boardData)}}>Y</Button>{' '}
-            <Button id="key_u" variant="outline-dark" onClick={()=>{updateBoard("W",boardData)}}>U</Button>{' '}
-            <Button id="key_i" variant="outline-dark" onClick={()=>{updateBoard("I",boardData)}}>I</Button>{' '}
-            <Button id="key_o" variant="outline-dark" onClick={()=>{updateBoard("O",boardData)}}>O</Button>{' '}
-            <Button id="key_p" variant="outline-dark" onClick={()=>{updateBoard("P",boardData)}}>P</Button>{' '}
+          <div className='btn-group'>
+            <Button id="key_q" variant="outline-dark" onClick={() => {updateBoard("Q",gameState)}}>Q</Button>{' '}
+            <Button id="key_w" variant="outline-dark" onClick={()=>{updateBoard("W",gameState)}}>W</Button>{' '}
+            <Button id="key_e" variant="outline-dark" onClick={()=>{updateBoard("E",gameState)}}>E</Button>{' '}
+            <Button id="key_r" variant="outline-dark" onClick={()=>{updateBoard("R",gameState)}}>R</Button>{' '}
+            <Button id="key_t" variant="outline-dark" onClick={()=>{updateBoard("T",gameState)}}>T</Button>{' '}
+            <Button id="key_y" variant="outline-dark" onClick={()=>{updateBoard("Y",gameState)}}>Y</Button>{' '}
+            <Button id="key_u" variant="outline-dark" onClick={()=>{updateBoard("W",gameState)}}>U</Button>{' '}
+            <Button id="key_i" variant="outline-dark" onClick={()=>{updateBoard("I",gameState)}}>I</Button>{' '}
+            <Button id="key_o" variant="outline-dark" onClick={()=>{updateBoard("O",gameState)}}>O</Button>{' '}
+            <Button id="key_p" variant="outline-dark" onClick={()=>{updateBoard("P",gameState)}}>P</Button>{' '}
           </div>
           </Col>
         </Row>
         <Row>
         <Col className="d-flex justify-content-center">
-          <div class='btn-group'>
-            <Button id="key_a" variant="outline-dark" onClick={()=>{updateBoard("A",boardData)}}>A</Button>{' '}
-            <Button id="key_s" variant="outline-dark" onClick={()=>{updateBoard("S",boardData)}}>S</Button>{' '}
-            <Button id="key_d" variant="outline-dark" onClick={()=>{updateBoard("D",boardData)}}>D</Button>{' '}
-            <Button id="key_f" variant="outline-dark" onClick={()=>{updateBoard("F",boardData)}}>F</Button>{' '}
-            <Button id="key_g" variant="outline-dark" onClick={()=>{updateBoard("G",boardData)}}>G</Button>{' '}
-            <Button id="key_h" variant="outline-dark" onClick={()=>{updateBoard("H",boardData)}}>H</Button>{' '}
-            <Button id="key_j" variant="outline-dark" onClick={()=>{updateBoard("J",boardData)}}>J</Button>{' '}
-            <Button id="key_k" variant="outline-dark" onClick={()=>{updateBoard("K",boardData)}}>K</Button>{' '}
-            <Button id="key_l" variant="outline-dark" onClick={()=>{updateBoard("L",boardData)}}>L</Button>{' '}
+          <div className='btn-group'>
+            <Button id="key_a" variant="outline-dark" onClick={()=>{updateBoard("A",gameState)}}>A</Button>{' '}
+            <Button id="key_s" variant="outline-dark" onClick={()=>{updateBoard("S",gameState)}}>S</Button>{' '}
+            <Button id="key_d" variant="outline-dark" onClick={()=>{updateBoard("D",gameState)}}>D</Button>{' '}
+            <Button id="key_f" variant="outline-dark" onClick={()=>{updateBoard("F",gameState)}}>F</Button>{' '}
+            <Button id="key_g" variant="outline-dark" onClick={()=>{updateBoard("G",gameState)}}>G</Button>{' '}
+            <Button id="key_h" variant="outline-dark" onClick={()=>{updateBoard("H",gameState)}}>H</Button>{' '}
+            <Button id="key_j" variant="outline-dark" onClick={()=>{updateBoard("J",gameState)}}>J</Button>{' '}
+            <Button id="key_k" variant="outline-dark" onClick={()=>{updateBoard("K",gameState)}}>K</Button>{' '}
+            <Button id="key_l" variant="outline-dark" onClick={()=>{updateBoard("L",gameState)}}>L</Button>{' '}
           </div>
           </Col>
         </Row>
         <Row>
         <Col className="d-flex justify-content-center">
-          <div class='btn-group'>
-            <Button id="key_Enter" variant="outline-dark" onClick={() => handleEnter(boardData)}>ENTER</Button>{' '}
-            <Button id="key_z" variant="outline-dark" onClick={()=>{updateBoard("Z",boardData)}}>Z</Button>{' '}
-            <Button id="key_x" variant="outline-dark" onClick={()=>{updateBoard("X",boardData)}}>X</Button>{' '}
-            <Button id="key_c" variant="outline-dark" onClick={()=>{updateBoard("C",boardData)}}>C</Button>{' '}
-            <Button id="key_v" variant="outline-dark" onClick={()=>{updateBoard("V",boardData)}}>V</Button>{' '}
-            <Button id="key_b" variant="outline-dark" onClick={()=>{updateBoard("B",boardData)}}>B</Button>{' '}
-            <Button id="key_n" variant="outline-dark" onClick={()=>{updateBoard("N",boardData)}}>N</Button>{' '}
-            <Button id="key_m" variant="outline-dark" onClick={()=>{updateBoard("M",boardData)}}>M</Button>{' '}
-            <Button id="key_Backspace" variant="outline-dark" onClick={() => handleBackspace(boardData)}>&lt;-</Button>{' '}
+          <div className='btn-group'>
+            <Button id="key_Enter" variant="outline-dark" onClick={() => handleEnter(gameState)}>ENTER</Button>{' '}
+            <Button id="key_z" variant="outline-dark" onClick={()=>{updateBoard("Z",gameState)}}>Z</Button>{' '}
+            <Button id="key_x" variant="outline-dark" onClick={()=>{updateBoard("X",gameState)}}>X</Button>{' '}
+            <Button id="key_c" variant="outline-dark" onClick={()=>{updateBoard("C",gameState)}}>C</Button>{' '}
+            <Button id="key_v" variant="outline-dark" onClick={()=>{updateBoard("V",gameState)}}>V</Button>{' '}
+            <Button id="key_b" variant="outline-dark" onClick={()=>{updateBoard("B",gameState)}}>B</Button>{' '}
+            <Button id="key_n" variant="outline-dark" onClick={()=>{updateBoard("N",gameState)}}>N</Button>{' '}
+            <Button id="key_m" variant="outline-dark" onClick={()=>{updateBoard("M",gameState)}}>M</Button>{' '}
+            <Button id="key_Backspace" variant="outline-dark" onClick={() => handleBackspace(gameState)}>&lt;-</Button>{' '}
           </div>
           </Col>
         </Row>
