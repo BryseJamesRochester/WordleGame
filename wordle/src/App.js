@@ -27,9 +27,9 @@ import {
 } from "./components/Words"
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom"
 import Profile from "./components/Profile"
-import Game from "./components/Game"
+import Game, { AppContext } from "./components/Game"
 import Home from "./components/Home"
-// export const AppContext = createContext()
+
 const currentRow = 0
 const currentIndex = 0
 
@@ -47,7 +47,7 @@ function setBoard(boardChanges) {
 }
 
 function App() {
-
+  const [currentUser, setcurrentUser] = useState("test")
   const token = getToken()
 
   if (!token) {
@@ -56,33 +56,35 @@ function App() {
 
   return (
     <Router>
-      <div>
-        <Navbar variant="dark" bg="dark">
-          <Container>
-            <Col>
-              <Navbar.Brand href="/">Wordle</Navbar.Brand>
-            </Col>
+        <div>
+          <Navbar variant="dark" bg="dark">
+            <Container>
+              <Col>
+                <Navbar.Brand href="/">Wordle</Navbar.Brand>
+              </Col>
 
-            <Col md={{ span: 2 }}>
-              <Nav.Link href="/game">Single Player</Nav.Link>
-            </Col>
-            <Col md={{ span: 1 }}>
-              <Nav.Link href="">Duel</Nav.Link>
-            </Col>
-            <Col md={{ span: 1 }}>
-              <Nav.Link href="/profile">Profile</Nav.Link>
-            </Col>
-            <Col md={{ span: 1 }}>
-              <Nav.Link href="/login">Login</Nav.Link>
-            </Col>
-          </Container>
-        </Navbar>
-      </div>
-      <Routes>
-        <Route path="/game" element={<Game />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/" element={<Home />} />
-      </Routes>
+              <Col style={{ whiteSpace: "nowrap", overflow: "hidden" }}>
+                <Nav.Link href="/game">Single Player</Nav.Link>
+              </Col>
+              <Col>
+                <Nav.Link href="">Multiplayer</Nav.Link>
+              </Col>
+              <Col>
+                <Nav.Link href="/profile">Profile</Nav.Link>
+              </Col>
+              <Col>
+                <Nav.Link href="/login">Login</Nav.Link>
+              </Col>
+            </Container>
+          </Navbar>
+        </div>
+        <Routes>
+          <Route path="/game" element={<Game />} />
+
+          <Route path="/profile" element={<Profile />} />
+
+          <Route path="/" element={<Home />} />
+        </Routes>
     </Router>
   )
 }
