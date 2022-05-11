@@ -38,6 +38,10 @@ function setBoard(boardChanges) {
 }
 
 function App() {
+  const [token, setToken] = useState()
+  if(!token) {
+    return <LoginPage setToken={setToken} />
+  }
   return (
     <Router>
       <div>
@@ -66,7 +70,7 @@ function App() {
         <Route path="/game" element={<Game />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/" element={<Home />} />
-        <Route path="/login" component={LoginPage} />
+        <Route path="/login" element={<LoginPage />} />
       </Routes>
     </Router>
   )

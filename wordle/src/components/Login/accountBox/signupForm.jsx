@@ -39,9 +39,7 @@ export function SignupForm(props, { setToken }) {
 
   const token = getToken()
 
-  if (!token) {
-    return <loginForm setToken={setToken} />
-  }
+
 
   const handleSubmit = async e => {
     e.preventDefault();
