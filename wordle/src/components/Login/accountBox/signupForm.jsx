@@ -15,25 +15,18 @@ export function SignupForm(props, { setToken }) {
   const [username, setUsername] = useState();
   // const [email, setEmail] = useState();
   const [password, setPassword] = useState();
-
+  const [confPass, setConfPass] = useState();
   const [response, setResponse] = useState();
   const { switchToSignin } = useContext(AccountContext);
 
   async function sendToBackend() {
-    setUsername(await document.getElementById("username").value);
-    let pass = await document.getElementById("password").value;
-    let confPass = await document.getElementById("confirmPassword").value;
-    if (pass==confPass) {
-      setPassword(pass);
-
+    if (password==confPass) {
       let options = {
         method: 'POST',
         url: 'http://localhost:5000/users/' + username + '/add',
         headers: {'Content-Type': 'application/json'},
-        data: {password: password, email: 'notworkingyet@email.com'}
+        data: {password: password, email: 'notworkingyet' + username + '@email.com'}
       };
-
-      setResponse('sending');
       axios.request(options).then(function (response) {
         setResponse(response);
       }).catch(function (error) {
@@ -47,10 +40,10 @@ export function SignupForm(props, { setToken }) {
     <div>
       <BoxContainer>
         <FormContainer>
-          <Input id="username" type="text" placeholder="Username" />
+          <Input id="username" type="text" placeholder="Username" onChange={e => setUsername(e.target.value)} />
           {/* <Input type="email" placeholder="Email" /> */}
-          <Input id="password" type="password" placeholder="Password" />
-          <Input id="comfirmPassword" type="password" placeholder="Password" />
+          <Input id="password" type="password" placeholder="Password" onChange={e => setPassword(e.target.value)} />
+          <Input id="comfirmPassword" type="password" placeholder="Password" onChange={e => setConfPass(e.target.value)} />
         </FormContainer>
         <Marginer direction="vertical" margin={10} />
         <SubmitButton onClick={sendToBackend} type="submit">Sign Up</SubmitButton>
@@ -63,7 +56,7 @@ export function SignupForm(props, { setToken }) {
         </MutedLink>
       </BoxContainer>
       <div>
-        <p>Hello: {response}</p>
+        <p>Username: {username} Password: {password} ConfPass: {confPass} Response: {response}</p>
       </div>
     </div>
   );
