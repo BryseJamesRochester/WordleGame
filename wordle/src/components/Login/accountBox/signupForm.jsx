@@ -16,7 +16,9 @@ export function SignupForm(props, { setToken }) {
   // const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [confPass, setConfPass] = useState();
+  const [email, setEmail] = useState();
   const [response, setResponse] = useState();
+
   const { switchToSignin } = useContext(AccountContext);
 
   async function sendToBackend() {
@@ -25,7 +27,7 @@ export function SignupForm(props, { setToken }) {
         method: 'POST',
         url: 'http://localhost:5000/users/' + username + '/add',
         headers: {'Content-Type': 'application/json'},
-        data: {password: password, email: 'notworkingyet' + username + '@email.com'}
+        data: {password: password, email: email}
       };
       axios.request(options).then(function (response) {
         setResponse(response);
@@ -39,15 +41,17 @@ export function SignupForm(props, { setToken }) {
   return (
     <div>
       <BoxContainer>
-        <FormContainer>
+        <FormContainer onSubmit={sendToBackend}>
           <Input id="username" type="text" placeholder="Username" onChange={e => setUsername(e.target.value)} />
+          <Input id="email" type="text" placeholder="Email" onChange={e => setEmail(e.target.value)} />
           {/* <Input type="email" placeholder="Email" /> */}
           <Input id="password" type="password" placeholder="Password" onChange={e => setPassword(e.target.value)} />
           <Input id="comfirmPassword" type="password" placeholder="Password" onChange={e => setConfPass(e.target.value)} />
-        </FormContainer>
+        
         <Marginer direction="vertical" margin={10} />
-        <SubmitButton onClick={sendToBackend} type="submit">Sign Up</SubmitButton>
+        <SubmitButton type="submit">Sign Up</SubmitButton>
         <Marginer direction="vertical" margin="1em" />
+        </FormContainer>
         <MutedLink href="#">
           Already have an account?
           <BoldLink href="#" onClick={switchToSignin}>
@@ -56,7 +60,7 @@ export function SignupForm(props, { setToken }) {
         </MutedLink>
       </BoxContainer>
       <div>
-        <p>Username: {username} Password: {password} ConfPass: {confPass} Response: {response}</p>
+        <p></p>
       </div>
     </div>
   );
