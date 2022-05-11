@@ -9,65 +9,62 @@ import {
 } from "./common";
 import { Marginer } from "../marginer";
 import { AccountContext } from "./accountContext";
-
-async function signUpUser(credentials) {
-  return fetch('/:username/add', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(credentials)
-  })
-    .then(data => data.json())
-}
-
-function setToken(userToken) {
-  sessionStorage.setItem("token", JSON.stringify(userToken))
-}
-
-function getToken() {
-  const tokenString = sessionStorage.getItem("token")
-  const userToken = JSON.parse(tokenString)
-  return userToken?.token
-}
+import axios from "axios";
 
 export function SignupForm(props, { setToken }) {
   const [username, setUsername] = useState();
-  const [email, setEmail] = useState();
+  // const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+
+  const [response, setResponse] = useState();
   const { switchToSignin } = useContext(AccountContext);
 
-  const token = getToken()
+  async function sendToBackend() {
+    setUsername(await document.getElementById("username").value);
+    let pass = await document.getElementById("password").value;
+    let confPass = await document.getElementById("confirmPassword").value;
+    if (pass==confPass) {
+      setPassword(pass);
 
+      let options = {
+        method: 'POST',
+        url: 'http://localhost:5000/users/' + username + '/add',
+        headers: {'Content-Type': 'application/json'},
+        data: {password: password, email: 'notworkingyet@email.com'}
+      };
 
+      setResponse('sending');
+      axios.request(options).then(function (response) {
+        setResponse(response);
+      }).catch(function (error) {
+        setResponse(error);
+      });
+    }
 
-  const handleSubmit = async e => {
-    e.preventDefault();
-    const token = await signUpUser({
-      username,
-      email,
-      password
-    });
-    setToken(token);
   }
 
   return (
-    <BoxContainer>
-      <FormContainer onSubmit={handleSubmit}>
-        <Input type="text" placeholder="Username" onChange={e => setUsername(e.target.value)}/>
-        <Input type="email" placeholder="Email" onChange={e => setEmail(e.target.value)}/>
-        <Input type="password" placeholder="Password" onChange={e => setPassword(e.target.value)}/>
-        <Input type="password" placeholder="Confirm Password" />
-      </FormContainer>
-      <Marginer direction="vertical" margin={10} />
-      <SubmitButton type="submit" onClick={handleSubmit}>Sign Up</SubmitButton>
-      <Marginer direction="vertical" margin="1em" />
-      <MutedLink href="#">
-        Already have an account?
-        <BoldLink href="#" onClick={switchToSignin}>
-          Sign In
-        </BoldLink>
-      </MutedLink>
-    </BoxContainer>
+    <div>
+      <BoxContainer>
+        <FormContainer>
+          <Input id="username" type="text" placeholder="Username" />
+          {/* <Input type="email" placeholder="Email" /> */}
+          <Input id="password" type="password" placeholder="Password" />
+          <Input id="comfirmPassword" type="password" placeholder="Password" />
+        </FormContainer>
+        <Marginer direction="vertical" margin={10} />
+        <SubmitButton onClick={sendToBackend} type="submit">Sign Up</SubmitButton>
+        <Marginer direction="vertical" margin="1em" />
+        <MutedLink href="#">
+          Already have an account?
+          <BoldLink href="#" onClick={switchToSignin}>
+            Sign In
+          </BoldLink>
+        </MutedLink>
+      </BoxContainer>
+      <div>
+        <p>Hello: {response}</p>
+      </div>
+    </div>
   );
 }
