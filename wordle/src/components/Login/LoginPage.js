@@ -1,6 +1,7 @@
-import './LoginPage.css';
+import React, { useContext } from "react"
+import "./LoginPage.css"
 import styled from "styled-components"
-import {AccountBox} from "./accountBox"
+import { AccountBox } from "./accountBox"
 
 const AppContainer = styled.div`
   width: 100%;
@@ -14,9 +15,9 @@ const AppContainer = styled.div`
 function LoginPage() {
   return (
     <AppContainer>
-      <AccountBox/>
+      <AccountBox />
     </AppContainer>
-  );
+  )
 }
 
-export default LoginPage;
+export default LoginPage

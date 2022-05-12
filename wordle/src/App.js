@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext } from "react"
+import React, { useState, useEffect, createContext, useContext } from "react"
 import logo from "./logo.svg"
 import "./App.css"
 
@@ -30,6 +30,8 @@ import Profile from "./components/Profile"
 import Game, { AppContext } from "./components/Game"
 import Home from "./components/Home"
 
+
+
 const currentRow = 0
 const currentIndex = 0
 
@@ -37,13 +39,16 @@ function setBoard(boardChanges) {
   boardDefault = boardChanges
 }
 
+
+
 function App() {
-  const [token, setToken] = useState()
-  if(!token) {
-    return <LoginPage setToken={setToken} />
-  }
+  const [loggedIn, setLoggedIn] = useState(false)
+  const loginInfo = { loggedIn, setLoggedIn }
+  // if (!loggedIn) {
+  //   return <LoginPage />
+  // }
   return (
-    <Router>
+      <Router>
         <div>
           <Navbar variant="dark" bg="dark">
             <Container>
@@ -72,8 +77,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<LoginPage />} />
-      </Routes>
-    </Router>
+        </Routes>
+      </Router>
   )
 }
 

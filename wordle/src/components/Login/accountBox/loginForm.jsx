@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState } from "react"
 import {
   BoldLink,
   BoxContainer,
@@ -6,59 +6,69 @@ import {
   Input,
   MutedLink,
   SubmitButton,
-} from "./common";
-import { Marginer } from "../marginer";
-import { AccountContext } from "./accountContext";
+} from "./common"
+import { Marginer } from "../marginer"
+import { AccountContext } from "./accountContext"
+import axios from "axios"
+import { Form } from "react-bootstrap"
 
-async function loginUser(credentials) {
-  return fetch('/:username/login', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(credentials)
-  })
-    .then(data => data.json())
-}
-
-function setToken(userToken) {
-  sessionStorage.setItem("token", JSON.stringify(userToken))
-}
-
-function getToken() {
-  const tokenString = sessionStorage.getItem("token")
-  const userToken = JSON.parse(tokenString)
-  return userToken?.token
-}
 
 export function LoginForm(props, { setToken }) {
-  const [username, setUsername] = useState();
-  const [password, setPassword] = useState();
-  const { switchToSignup } = useContext(AccountContext);
+  const [loginResponse, setLoginResponse] = useState()
+  const [loginData, setLoginData] = useState({
+    username: "",
+    password: "",
+  })
 
-  const token = getToken()
+  const { switchToSignup } = useContext(AccountContext)
 
 
+  const handleSubmit = (event) => {
+    console.log("submitting")
+    axios
+      .post("http://localhost:5001/users/" + loginData.username + "/login", {
+        password: loginData.password,
+      }, {})
+      .then(function (response) {
+        if(response.data=="Successful login") {
+          window.sessionStorage.setItem("Username", loginData.username);
+        }
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+  }
 
-  const handleSubmit = async e => {
-    e.preventDefault();
-    const token = await loginUser({
-      username,
-      password
-    });
-    setToken(token);
+  const handleChange = (event) => {
+    setLoginData({
+      ...loginData,
+      [event.target.name]: event.target.value,
+    })
   }
 
   return (
     <BoxContainer>
-      <FormContainer onSubmit={handleSubmit}>
-        <Input type="username" placeholder="Username" onChange={e => setUsername(e.target.value)}/>
-        <Input type="password" placeholder="Password" onChange={e => setPassword(e.target.value)}/>
-      </FormContainer>
-      <Marginer direction="vertical" margin={10} />
-      <MutedLink href="#">Forget your password?</MutedLink>
-      <Marginer direction="vertical" margin="1.6em" />
-      <SubmitButton type="submit" onClick={handleSubmit}>Sign In</SubmitButton>
+      <Form onSubmit={handleSubmit}>
+        <Form.Control
+          type="text"
+          name="username"
+          placeholder="Username"
+          value={loginData.username}
+          onChange={handleChange}
+        />
+        <Form.Control
+          type="text"
+          name="password"
+          placeholder="Password"
+          value={loginData.password}
+          onChange={handleChange}
+        />
+
+        <Marginer direction="vertical" margin={10} />
+        <MutedLink href="#">Forget your password?</MutedLink>
+        <Marginer direction="vertical" margin="1.6em" />
+        <SubmitButton type="submit">Sign In</SubmitButton>
+      </Form>
       <Marginer direction="vertical" margin="1em" />
       <MutedLink href="#">
         Don't have an account?{" "}
@@ -67,5 +77,5 @@ export function LoginForm(props, { setToken }) {
         </BoldLink>
       </MutedLink>
     </BoxContainer>
-  );
+  )
 }
