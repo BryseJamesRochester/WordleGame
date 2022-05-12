@@ -15,7 +15,7 @@ const addUser = async function (req, res, next) {
     const username = req.params.username;
     const password = req.body.password;
     const email = req.body.email;
-
+    console.log("signing up")
     try {
         if (username == undefined) throw Error('Username not defined');
         if (password == undefined) throw Error('Password not defined');

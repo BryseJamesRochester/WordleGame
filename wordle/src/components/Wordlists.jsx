@@ -14,7 +14,7 @@ import { UserContext } from "../App"
 import setcurrentUser from "./Profile"
 
 function Wordlists() {
-  const [currentUser, setcurrentUser] = useState("test")
+  const [currentUser, setcurrentUser] = useState(window.sessionStorage.getItem("Username"))
   const [wordlistData, setWordlistData] = useState()
   const [wordlistCount, setWordlistCount] = useState(0)
   const [formData, setFormData] = useState({

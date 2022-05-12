@@ -38,9 +38,15 @@ function setBoard(boardChanges) {
 }
 
 function App() {
-  const [token, setToken] = useState()
-  if(!token) {
-    return <LoginPage setToken={setToken} />
+  const [loggedIn, setLoggedIn] = useState(false)
+  React.useEffect(() => {
+    if(window.sessionStorage.getItem("Username")!=null) {
+      setLoggedIn(true)
+    }
+  }, [window.sessionStorage.getItem("Username")])
+
+  if(!loggedIn) {
+    return <LoginPage />
   }
   return (
     <Router>
@@ -61,7 +67,7 @@ function App() {
                 <Nav.Link href="/profile">Profile</Nav.Link>
               </Col>
               <Col>
-                <Nav.Link href="/login">Login</Nav.Link>
+              <Nav.Link onClick={window.sessionStorage.removeItem("Username")}>Logout</Nav.Link>
               </Col>
             </Container>
           </Navbar>

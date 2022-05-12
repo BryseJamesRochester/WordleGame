@@ -17,7 +17,6 @@ export function SignupForm(props, { setToken }) {
   const [password, setPassword] = useState();
   const [confPass, setConfPass] = useState();
   const [email, setEmail] = useState();
-  const [response, setResponse] = useState();
 
   const { switchToSignin } = useContext(AccountContext);
 
@@ -25,14 +24,15 @@ export function SignupForm(props, { setToken }) {
     if (password==confPass) {
       let options = {
         method: 'POST',
-        url: 'http://localhost:5000/users/' + username + '/add',
+        url: 'http://localhost:5001/users/' + username + '/add',
         headers: {'Content-Type': 'application/json'},
         data: {password: password, email: email}
       };
       axios.request(options).then(function (response) {
-        setResponse(response);
+        if (response.data.success)
+          window.sessionStorage.setItem("Username", username);
       }).catch(function (error) {
-        setResponse(error);
+        console.log(error)
       });
     }
 

@@ -9,7 +9,7 @@ require('dotenv').config();
 const myArgs = process.argv.slice(2).map((string) => string.toLowerCase());
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5001;
 
 app.use(cors());
 app.use(express.json());

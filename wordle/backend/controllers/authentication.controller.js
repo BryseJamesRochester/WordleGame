@@ -10,8 +10,14 @@ const login = async function(req, res, next) {
         const user = await UserService.getUser(username);
         const hash = user.password;
         const success = await EncryptionService.verify(password, hash);
-        if (success) return res.status(200).json('Successful login');
-        else return res.status(200).json('Unsuccessful login');
+        if (success) {
+            console.log("success")
+            return res.status(200).json({message:'Successful login', success: true});
+        }
+        else  {
+            console.log("fail")
+            return res.status(200).json('Unsuccessful login');
+        }
     } catch (e) {
         return res.status(400).json({ status: 400, message: e.message });
     }

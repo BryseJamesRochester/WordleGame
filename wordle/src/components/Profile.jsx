@@ -7,7 +7,7 @@ import Wordlists from "./Wordlists"
 import { UserContext } from "../App"
 
 function Profile() {
-  const [currentUser, setcurrentUser] = useState("test")
+  const [currentUser, setcurrentUser] = useState(window.sessionStorage.getItem("Username"))
   const [userData, setUserData] = useState("")
 
   function setUser1() {
