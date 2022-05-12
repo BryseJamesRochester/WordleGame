@@ -42,20 +42,22 @@ function loadPrevGameState(gameState, boardData){
 
 
 
-function Game() {
+function Game(props) {
+  
   const [board, setData] = useState(defaultData)
   const [gameOver, setGameOver] = useState(false) // true if game is over
   const [gameWon, setGameWon] = useState(false)  // true if game is won
   const [gamestate, setGamestate] = useState(null)
   const [inputResponse, getResponse] = useState(null)
+ 
   const option = {
     method: 'GET',
-    url: 'http://localhost:5000/users/test/gamestate',
+    url: 'http://localhost:5001/users/test/gamestate',
     headers: {'Content-Type': 'application/json'}
   }
 
   useEffect(() => {
-    if(gamestate === null){
+    if(gamestate === null && !fetchDone){
       axios.request(option)
       .then((response) => {
           setGamestate(response.data)
@@ -72,17 +74,17 @@ function Game() {
         setData(obj)
         fetchDone = true
       }
-      else if (!gamestate.active && count < 1){
+      else if (!gamestate.active && count < 1 && props !== null){
         count++;
         fetchDone = false
           const options = {
             method: 'GET',
-            url: 'http://localhost:5000/game/test/start',
+            url: 'http://localhost:5001/game/test/start',
             params: {'': ['', '', '']},
             headers: {'Content-Type': 'application/json'},
-            data: {useDefaultWordlist: false, difficulty: 'all', numGuesses: 0}
+            data: {useDefaultWordlist: false, difficulty: props.data.difficulty, numGuesses: 0}
           };
-
+          console.log(options.data)
           axios.request(options).then((response) => {
             setGamestate(response.data)
             }
