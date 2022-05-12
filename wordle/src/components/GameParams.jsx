@@ -14,12 +14,13 @@ const margin = {
 }
 
 var props = {
+    prevGame : false,
+    singlePlayer: true,
     difficulty : 'easy',
     useDefaultWordlist : false,
     wordlist : 'names',
     userName : 'test'
 }
-
 
 
 
@@ -30,12 +31,29 @@ const url = 'http://localhost:5001/users/' + userName + '/profile'
 function GameParams() {
 
 const[wordlists,getWordlists] = useState(null) 
+const[prevGameData,getData] = useState(null)
 const[fetchCount, increment] = useState(0)
 const[loopCount, incrementLoop] = useState(0)
 const [isDisabled, setDisabled] = useState(enabled)
 const [selected, setSelected] = useState('easy')
+const [callFinished, setFinished] = useState(false)
 const[gameParams, setParams] = useState(props)
+const[alreadyFetched, setFetched] = useState(false)
 const navigate = useNavigate()
+
+//check for previous gameState 
+const options2 = {
+  method: 'GET',
+  url: 'http://localhost:5001/users/test/gamestate',
+  headers: {'Content-Type': 'application/json'}
+};
+if(!alreadyFetched){
+axios.request(options2).then(function (response) {
+  getData(response.data);
+}).catch(function (error) {
+  console.error(error);
+});
+}
 const handleChange = event => {
     setSelected(event.target.value);
 };
@@ -47,10 +65,10 @@ const handleCheckbox = event => {
         setDisabled(enabled)
 }
 
+
+
+
 const handleStart = event => {
-
-    
-
     event.preventDefault()
     var difficulty; 
     if(document.getElementById('difficulty_0').checked === true)
@@ -77,23 +95,61 @@ const handleStart = event => {
    props.wordlist = wordlist
    props.userName = userName
    console.log(props)
-   
-    navigate({
-        pathname: '/singleplayer',
-        state: {props}
-    })
+   var wordlists = [props.wordlist]
+    console.log(wordlists)
+   //make api call if we want to use custom wordlist only 
+   if(!useDefaultWordlist){
+   const options = {
+    method: 'PUT',
+    url: 'http://localhost:5001/users/test/wordlist/enable',
+    headers: {'Content-Type': 'application/json'},
+    data: {wordlistNames: wordlists}
+  };
+  
+  axios.request(options).then(function (response) {
+    setFinished(true)
+  }).catch(function (error) {
+    console.error(error);
+  });}
+  else
+    setFinished(true)
 }
+
+useEffect( () => {
+  if(callFinished){
+    navigate({
+      pathname: '/singleplayer',
+      state: {props}
+  })
+  }
+},[callFinished])
 
 var loop = 0;
 const options = {method: 'GET', url: url};
 
-axios.request(options).then(function (response) {
-if(fetchCount < 1){
-  getWordlists(response.data.wordlists);
-}
-}).catch(function (error) {
-  console.error(error);
-});
+useEffect(() => {
+  if(prevGameData === null)
+     return
+  if(prevGameData.active === true){
+    props.prevGame = prevGameData.active
+    console.log(props)
+    navigate({
+      pathname: '/singleplayer',
+        state: {props}
+    })
+  }  
+  else{
+    setFetched(true)
+    axios.request(options).then(function (response) {
+      if(fetchCount < 1){
+        getWordlists(response.data.wordlists);
+      }
+      }).catch(function (error) {
+        console.error(error);
+      });
+  }
+    
+},[prevGameData])
 
 useEffect(() => {
     if(wordlists === null)
