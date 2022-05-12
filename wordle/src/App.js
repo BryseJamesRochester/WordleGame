@@ -42,9 +42,16 @@ function setBoard(boardChanges) {
   boardDefault = boardChanges
 }
 
+var props = {
+  difficulty: 'easy',
+  useDefaultWordlist: false,
+  wordlist: 'names',
+  userName: 'test'
+}
+
 function App() {
 
-  }
+  
   return (
     <Router>
         <div>
@@ -79,7 +86,7 @@ function App() {
           <Route path="/join" element={<JoinRoom/>}/>
           <Route path="/profile" element={<Profile />} />
           <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login/>}/>
+          <Route path="/login" element={<LoginPage/>}/>
           <Route path="/singleplayer" element={<Game data={props}/>}/>
          
 
