@@ -53,6 +53,7 @@ axios.request(options2).then(function (response) {
 }).catch(function (error) {
   console.error(error);
 });
+
 }
 const handleChange = event => {
     setSelected(event.target.value);
@@ -70,7 +71,7 @@ const handleCheckbox = event => {
 
 const handleStart = event => {
     event.preventDefault()
-    var difficulty; 
+    var difficulty;
     if(document.getElementById('difficulty_0').checked === true)
         difficulty = 'easy'
     else if(document.getElementById('difficulty_1').checked === true)
@@ -84,7 +85,7 @@ const handleStart = event => {
         useDefaultWordlist = true;
     else
         useDefaultWordlist = false;
-    var wordlist = null
+    var wordlist;
     if(!useDefaultWordlist){
         wordlist = document.getElementById('selectWordlist').value
     }
@@ -107,12 +108,11 @@ const handleStart = event => {
   };
   
   axios.request(options).then(function (response) {
-    setFinished(true)
+    console.log(response)
   }).catch(function (error) {
     console.error(error);
   });}
-  else
-    setFinished(true)
+  setFinished(true)
 }
 
 useEffect( () => {
@@ -128,6 +128,7 @@ var loop = 0;
 const options = {method: 'GET', url: url};
 
 useEffect(() => {
+  setFetched(alreadyFetched)
   if(prevGameData === null)
      return
   if(prevGameData.active === true){
