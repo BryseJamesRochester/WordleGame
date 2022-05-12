@@ -24,6 +24,13 @@ const getUserGameState = async function (username) {
  */
 const updateUserGameState = async function (username, gamestate) {
     try {
+        if (gamestate.result != 'Active'){
+            if (gamestate.result == 'win')
+                await User.updateOne({username:username}, {$inc: {'stats.gamesPlayed': 1, 'stats.gamesWon':1}}).exec();
+            else
+                await User.updateOne({username:username}, {$inc: {'stats.gamesPlayed': 1}}).exec();
+            gamestate.result = 'complete';
+        }
         await User.updateOne({ username: username }, { gamestate: gamestate });
         return;
     } catch (e) {

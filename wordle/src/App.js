@@ -15,7 +15,7 @@ import {
   Nav,
   Button,
 } from "react-bootstrap"
-import Login from "./components/Login/Login"
+import LoginPage from "./components/Login/LoginPage"
 import useToken from "./useToken"
 import {
   boardCurrent,
@@ -29,39 +29,22 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom"
 import Profile from "./components/Profile"
 import Game, { AppContext } from "./components/Game"
 import Home from "./components/Home"
+
 import JoinRoom from "./components/JoinRoom"
 import GameParams from "./components/GameParams"
+
 
 const currentRow = 0
 const currentIndex = 0
 
-var props = {
-  difficulty : 'easy',
-  useDefaultWordlist : false,
-  wordlist : 'names',
-  userName : 'test'
-}
-function setToken(userToken) {
-  sessionStorage.setItem("token", JSON.stringify(userToken))
-}
 
-function getToken() {
-  const tokenString = sessionStorage.getItem("token")
-  const userToken = JSON.parse(tokenString)
-  return userToken?.token
-}
 function setBoard(boardChanges) {
   boardDefault = boardChanges
 }
 
 function App() {
-  const [currentUser, setcurrentUser] = useState("test")
-  const token = getToken()
 
-  if (!token) {
-    //return <Login setToken={setToken} />
   }
-
   return (
     <Router>
         <div>
@@ -75,7 +58,11 @@ function App() {
                 <Nav.Link href="/game">Single Player</Nav.Link>
               </Col>
               <Col>
+
                 <Nav.Link href="/join">Multiplayer</Nav.Link>
+
+                <Nav.Link href="">Multiplayer</Nav.Link>
+
               </Col>
               <Col>
                 <Nav.Link href="/profile">Profile</Nav.Link>
@@ -87,6 +74,7 @@ function App() {
           </Navbar>
         </div>
         <Routes>
+
           <Route path="/game" element={<GameParams/>} />
           <Route path="/join" element={<JoinRoom/>}/>
           <Route path="/profile" element={<Profile />} />
@@ -94,6 +82,13 @@ function App() {
           <Route path="/login" element={<Login/>}/>
           <Route path="/singleplayer" element={<Game data={props}/>}/>
          
+
+
+          <Route path="/game" element={<Game />} />
+
+          <Route path="/profile" element={<Profile />} />
+
+          <Route path="/" element={<Home />} />
 
         </Routes>
     </Router>
