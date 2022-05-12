@@ -89,7 +89,9 @@ function Profile() {
                 <Col>
                   <div>
                     {userData.stats && userData.stats.gamesWon && (
-                      <div>userData.stats.gamesWon</div>
+
+                      <div>{userData.stats.gamesWon}</div>
+
                     )}
                   </div>
                 </Col>

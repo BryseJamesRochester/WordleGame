@@ -46,7 +46,8 @@ function handleEnter(context){
     col = 0;
     const options = {
       method: 'POST',
-      url: 'http://localhost:5000/game/test/guess',
+      url: 'http://localhost:5001/game/test/guess',
+
       headers: {'Content-Type': 'application/json'},
       data: {guess: input.toLowerCase()}
     };
